@@ -1,4 +1,4 @@
-package io.sutu.Communications.Bittrex;
+package io.sutu.DataProviders.Bittrex.Communications;
 
 public class BittrexClientException extends Exception {
 

@@ -1,4 +1,4 @@
-package io.sutu.Communications.Bittrex;
+package io.sutu.DataProviders.Bittrex.Communications;
 
 import org.apache.http.client.fluent.Request;
 import org.apache.http.client.utils.URIBuilder;

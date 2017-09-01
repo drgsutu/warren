@@ -1,6 +1,6 @@
 package io.sutu;
 
-import io.sutu.Communications.Bittrex.BittrexClient;
+import io.sutu.DataProviders.Bittrex.Communications.BittrexClient;
 
 class Warren {
     public static void main(String[] args) {
