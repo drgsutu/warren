@@ -4,9 +4,8 @@ import io.sutu.DataProviders.Bittrex.Communications.BittrexClient;
 import io.sutu.DataProviders.Bittrex.Communications.BittrexClientException;
 
 import java.util.Date;
-import java.util.TimerTask;
 
-public class BittrexDataProviderTask extends TimerTask {
+public class BittrexDataProviderTask implements Runnable {
 
     @Override
     public void run() {
