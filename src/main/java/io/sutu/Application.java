@@ -8,16 +8,22 @@ import java.util.concurrent.TimeUnit;
 
 class Application {
 
-    BittrexClient bittrexClient;
+    public static final int REQUESTS_PERIOD_SECONDS = 10;
 
-    Application(BittrexClient bittrexClient) {
+    private BittrexClient bittrexClient;
+
+    private Storage storage;
+
+    Application(BittrexClient bittrexClient, Storage storage) {
         this.bittrexClient = bittrexClient;
+        this.storage = storage;
     }
 
     void run() {
         int cpuCores = Runtime.getRuntime().availableProcessors();
-        ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(cpuCores);
-        BittrexDataProviderTask bittrexDataProviderTask = new BittrexDataProviderTask();
-        scheduledExecutorService.scheduleAtFixedRate(bittrexDataProviderTask, 0, 10, TimeUnit.SECONDS);
+        ScheduledExecutorService executorService = Executors.newScheduledThreadPool(cpuCores);
+
+        BittrexDataProviderTask bittrexDataProviderTask = new BittrexDataProviderTask(bittrexClient, storage);
+        executorService.scheduleAtFixedRate(bittrexDataProviderTask, 0, REQUESTS_PERIOD_SECONDS, TimeUnit.SECONDS);
     }
 }
