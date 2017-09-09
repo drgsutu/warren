@@ -9,7 +9,6 @@ import java.util.concurrent.TimeUnit;
 class Application {
 
     public static final int REQUESTS_PERIOD_SECONDS = 10;
-
     private BittrexClient bittrexClient;
 
     private Storage storage;
@@ -20,10 +19,14 @@ class Application {
     }
 
     void run() {
+        String[] markets = {"BTC-ETH", "BTC-NEO", "BTC-OMG"};
+
         int cpuCores = Runtime.getRuntime().availableProcessors();
         ScheduledExecutorService executorService = Executors.newScheduledThreadPool(cpuCores);
 
-        BittrexDataProviderTask bittrexDataProviderTask = new BittrexDataProviderTask(bittrexClient, storage);
-        executorService.scheduleAtFixedRate(bittrexDataProviderTask, 0, REQUESTS_PERIOD_SECONDS, TimeUnit.SECONDS);
+        for (String market : markets) {
+            BittrexDataProviderTask bittrexDataProviderTask = new BittrexDataProviderTask(market, bittrexClient, storage);
+            executorService.scheduleAtFixedRate(bittrexDataProviderTask, 0, REQUESTS_PERIOD_SECONDS, TimeUnit.SECONDS);
+        }
     }
 }
