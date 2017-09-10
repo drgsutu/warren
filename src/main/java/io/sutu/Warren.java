@@ -1,10 +1,16 @@
 package io.sutu;
 
-import io.sutu.DataProviders.Bittrex.Communications.BittrexClient;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 
+@Configuration
+@ComponentScan("io.sutu")
 class Warren {
     public static void main(String[] args) {
-        Application app = new Application(new BittrexClient(), new Storage());
+        ApplicationContext context = new AnnotationConfigApplicationContext(Warren.class);
+        Application app = context.getBean(Application.class);
         app.run();
     }
 }

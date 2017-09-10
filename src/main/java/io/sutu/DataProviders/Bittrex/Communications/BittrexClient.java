@@ -2,11 +2,13 @@ package io.sutu.DataProviders.Bittrex.Communications;
 
 import org.apache.http.client.fluent.Request;
 import org.apache.http.client.utils.URIBuilder;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+@Service
 public class BittrexClient {
 
     public String getTicker(String market) throws BittrexClientException {

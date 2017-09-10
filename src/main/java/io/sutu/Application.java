@@ -1,21 +1,22 @@
 package io.sutu;
 
-import io.sutu.DataProviders.Bittrex.Communications.BittrexClient;
+import io.sutu.DataProviders.Bittrex.BittrexDataProviderTask;
+import io.sutu.DataProviders.Bittrex.BittrexDataProviderTaskFactory;
+import org.springframework.stereotype.Component;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+@Component
 class Application {
 
-    public static final int REQUESTS_PERIOD_SECONDS = 10;
-    private BittrexClient bittrexClient;
+    static final int REQUESTS_PERIOD_SECONDS = 10;
 
-    private Storage storage;
+    private BittrexDataProviderTaskFactory bittrexDataProviderTaskFactory;
 
-    Application(BittrexClient bittrexClient, Storage storage) {
-        this.bittrexClient = bittrexClient;
-        this.storage = storage;
+    public Application(BittrexDataProviderTaskFactory bittrexDataProviderTaskFactory) {
+        this.bittrexDataProviderTaskFactory = bittrexDataProviderTaskFactory;
     }
 
     void run() {
@@ -25,7 +26,7 @@ class Application {
         ScheduledExecutorService executorService = Executors.newScheduledThreadPool(cpuCores);
 
         for (String market : markets) {
-            BittrexDataProviderTask bittrexDataProviderTask = new BittrexDataProviderTask(market, bittrexClient, storage);
+            BittrexDataProviderTask bittrexDataProviderTask = bittrexDataProviderTaskFactory.newTaskForMarket(market);
             executorService.scheduleAtFixedRate(bittrexDataProviderTask, 0, REQUESTS_PERIOD_SECONDS, TimeUnit.SECONDS);
         }
     }
