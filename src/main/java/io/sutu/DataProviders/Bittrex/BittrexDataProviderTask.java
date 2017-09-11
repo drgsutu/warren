@@ -5,12 +5,10 @@ import io.sutu.DataProviders.Bittrex.Communications.BittrexClient;
 import io.sutu.DataProviders.Bittrex.Communications.BittrexClientException;
 import io.sutu.Storage.Storage;
 import io.sutu.Storage.Ticker;
-import org.springframework.stereotype.Component;
 
 import java.time.Instant;
 import java.util.Date;
 
-@Component
 public class BittrexDataProviderTask implements Runnable {
 
     private final BittrexClient bittrexClient;
