@@ -13,7 +13,7 @@ public class StorageFactory {
     public Storage newStorageForMarket(String market) {
         switch (market) {
             case BittrexMarkets.BTCETH:
-                if (this.storages.containsKey(BittrexMarkets.BTCETH)) {
+                if (!this.storages.containsKey(BittrexMarkets.BTCETH)) {
                     this.storages.put(BittrexMarkets.BTCETH, new BtcEthStorage());
                 }
                 return this.storages.get(BittrexMarkets.BTCETH);
