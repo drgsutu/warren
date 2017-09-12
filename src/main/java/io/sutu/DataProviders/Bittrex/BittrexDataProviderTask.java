@@ -41,11 +41,11 @@ public class BittrexDataProviderTask implements Runnable {
             Instant instant = Instant.now();
             long timeStamp = instant.getEpochSecond();
             String resultRaw = bittrexClient.getTicker(market);
-            System.out.println(String.format("[%s] %s %s", new Date(), market, resultRaw));
 
             // deserialize data
             BittrexResult result = gson.fromJson(resultRaw, BittrexResult.class);
 
+            System.out.println(String.format("[%s][%s] %s %s", Thread.currentThread().getName(), new Date(), market, result.getTicker().getLast()));
             // store data
             storage.add(new Ticker(timeStamp, result.getTicker().getLast()));
 

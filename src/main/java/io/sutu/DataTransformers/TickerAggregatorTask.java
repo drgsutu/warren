@@ -4,6 +4,7 @@ import io.sutu.Storage.Storage;
 import io.sutu.Storage.Ticker;
 
 import java.time.Instant;
+import java.util.Date;
 import java.util.List;
 
 public class TickerAggregatorTask implements Runnable {
@@ -19,7 +20,8 @@ public class TickerAggregatorTask implements Runnable {
         Instant instant = Instant.now();
         long timeStamp = instant.getEpochSecond() - 60;
         List<Ticker> tickers = storage.getTickersByTimeStamp(timeStamp);
-        System.out.println(tickers);
+
+        System.out.println(String.format("[%s][%s] %s", Thread.currentThread().getName(), new Date(), tickers.size()));
     }
 
 }
