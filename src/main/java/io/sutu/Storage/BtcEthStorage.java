@@ -13,7 +13,6 @@ public class BtcEthStorage implements Storage {
     }
 
     public List<Ticker> getTickersByTimeStamp(long timeStamp) {
-        System.out.println(storage);
         return storage.stream()
                 .filter(item -> item.getTimeStamp() > timeStamp)
                 .collect(Collectors.toList());
