@@ -9,7 +9,7 @@ import java.util.List;
 
 public class TickerAggregatorTask implements Runnable {
 
-    private volatile Storage storage;
+    private Storage storage;
 
     public TickerAggregatorTask(Storage storage) {
         this.storage = storage;
