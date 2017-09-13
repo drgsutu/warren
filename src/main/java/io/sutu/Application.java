@@ -45,7 +45,7 @@ class Application {
 
             // reformat data
             TickerAggregatorTask tickerAggregatorTask = tickerAggregatorTaskFactory.newTaskForMarket(market);
-            executorService.scheduleAtFixedRate(tickerAggregatorTask, 20, CALCULATIONS_PERIOD_SECONDS, TimeUnit.SECONDS);
+            executorService.scheduleAtFixedRate(tickerAggregatorTask, CALCULATIONS_PERIOD_SECONDS, CALCULATIONS_PERIOD_SECONDS, TimeUnit.SECONDS);
         }
 
         // apply indicators on reformatted data
