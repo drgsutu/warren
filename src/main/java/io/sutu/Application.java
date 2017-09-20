@@ -3,8 +3,8 @@ package io.sutu;
 import io.sutu.DataProviders.Bittrex.BittrexDataProviderTask;
 import io.sutu.DataProviders.Bittrex.BittrexDataProviderTaskFactory;
 import io.sutu.DataProviders.Bittrex.BittrexMarkets;
-import io.sutu.DataTransformers.TickerAggregatorTask;
-import io.sutu.DataTransformers.TickerAggregatorTaskFactory;
+import io.sutu.DataProcessors.TickerAggregatorTask;
+import io.sutu.DataProcessors.TickerAggregatorTaskFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.concurrent.Executors;

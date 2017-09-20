@@ -1,4 +1,4 @@
-package io.sutu.DataTransformers;
+package io.sutu.DataProcessors;
 
 import io.sutu.Storage.Storage;
 import io.sutu.Storage.Ticker;
