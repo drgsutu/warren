@@ -1,24 +1,21 @@
 package io.sutu.Storage;
 
-import io.sutu.DataProviders.Bittrex.BittrexMarkets;
+import io.sutu.DataProviders.CryptoCompare.MarketData;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 @Component
 public class StorageFactory {
 
-    private HashMap<String, Storage> storages= new HashMap<>();
+    private HashMap<String, List<MarketData>> storages = new HashMap<>();
 
-    public Storage newStorageForMarket(String market) {
-        switch (market) {
-            case BittrexMarkets.BTCETH:
-                if (!this.storages.containsKey(BittrexMarkets.BTCETH)) {
-                    this.storages.put(BittrexMarkets.BTCETH, new BtcEthStorage());
-                }
-                return this.storages.get(BittrexMarkets.BTCETH);
+    public List newStorageForMarket(String market) {
+        if (!this.storages.containsKey(market)) {
+            this.storages.put(market, new ArrayList<>());
         }
-
-        return null;
+        return this.storages.get(market);
     }
 }
