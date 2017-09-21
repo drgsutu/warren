@@ -13,11 +13,11 @@ class Application {
     }
 
     void run() {
-        String[] subscriptions = {
-                "2~BitTrex~ETH~BTC"
+        String[] markets = {
+            "ETHBTC"
         };
 
-        socketClient.subscribe(subscriptions);
+        socketClient.subscribe(markets);
 
         // apply indicators on reformatted data
 

@@ -7,10 +7,17 @@ import org.springframework.stereotype.Component;
 
 import java.net.URISyntaxException;
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Component
 public class SocketClient {
+
+    private static final HashMap<String, String> marketsToSubscriptions;
+    static {
+        marketsToSubscriptions = new HashMap<>();
+        marketsToSubscriptions.put("ETHBTC", "2~BitTrex~ETH~BTC");
+    }
 
     private StorageFactory storageFactory;
 
@@ -18,15 +25,18 @@ public class SocketClient {
         this.storageFactory = storageFactory;
     }
 
-    public void subscribe(String[] subscriptions) {
+    public void subscribe(String[] markets) {
         String hostName = "https://streamer.cryptocompare.com";
+        List<String> subscriptions = Stream.of(markets)
+                .map(SocketClient.marketsToSubscriptions::get)
+                .collect(Collectors.toList());
 
         try {
             Socket socket = IO.socket(hostName);
             socket.on(Socket.EVENT_CONNECT, args -> {
 
                 HashMap<String, List<String>> emitParam = new HashMap<>();
-                emitParam.put("subs", Arrays.asList(subscriptions));
+                emitParam.put("subs", subscriptions);
                 socket.emit("SubAdd", emitParam);
 
             }).on("m", args -> {
