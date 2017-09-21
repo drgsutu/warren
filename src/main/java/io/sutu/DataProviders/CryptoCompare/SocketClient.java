@@ -36,7 +36,7 @@ public class SocketClient {
                         .forEach(line -> {
                             System.out.println(line);
                             MarketData marketData = unpack((String) line);
-                            List storage = storageFactory.newStorageForMarket(marketData.getMarket());
+                            List<MarketData> storage = storageFactory.newStorageForMarket(marketData.getMarket());
                             storage.add(marketData);
                         });
 

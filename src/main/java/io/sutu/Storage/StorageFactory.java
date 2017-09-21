@@ -12,7 +12,7 @@ public class StorageFactory {
 
     private HashMap<String, List<MarketData>> storages = new HashMap<>();
 
-    public List newStorageForMarket(String market) {
+    public List<MarketData> newStorageForMarket(String market) {
         if (!this.storages.containsKey(market)) {
             this.storages.put(market, new ArrayList<>());
         }
