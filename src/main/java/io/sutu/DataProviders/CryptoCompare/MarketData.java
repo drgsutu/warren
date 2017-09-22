@@ -29,4 +29,19 @@ public class MarketData {
         return fromCurrency + toCurrency;
     }
 
+    public double getPrice() {
+        return price;
+    }
+
+    public long getLastUpdate() {
+        return lastUpdate;
+    }
+
+    public double getLastVolume() {
+        return lastVolume;
+    }
+
+    public double getLastVolumeTo() {
+        return lastVolumeTo;
+    }
 }
