@@ -3,18 +3,18 @@ package io.sutu.Storage;
 import io.sutu.DataProviders.CryptoCompare.MarketData;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
+import java.util.Deque;
 import java.util.HashMap;
-import java.util.List;
+import java.util.LinkedList;
 
 @Component
 public class StorageFactory {
 
-    private HashMap<String, List<MarketData>> storages = new HashMap<>();
+    private HashMap<String, Deque<MarketData>> storages = new HashMap<>();
 
-    public List<MarketData> newStorageForMarket(String market) {
+    public Deque<MarketData> newStorageForMarket(String market) {
         if (!this.storages.containsKey(market)) {
-            this.storages.put(market, new ArrayList<>());
+            this.storages.put(market, new LinkedList<>());
         }
         return this.storages.get(market);
     }

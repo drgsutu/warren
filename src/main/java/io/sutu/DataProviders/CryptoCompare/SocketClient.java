@@ -6,7 +6,9 @@ import io.sutu.Storage.StorageFactory;
 import org.springframework.stereotype.Component;
 
 import java.net.URISyntaxException;
-import java.util.*;
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -44,10 +46,9 @@ public class SocketClient {
                 Stream.of(args)
                         .filter(line -> line.toString().charAt(0) != '3')
                         .forEach(line -> {
-                            System.out.println(line);
                             MarketData marketData = unpack((String) line);
-                            List<MarketData> storage = storageFactory.newStorageForMarket(marketData.getMarket());
-                            storage.add(marketData);
+                            Deque<MarketData> storage = storageFactory.newStorageForMarket(marketData.getMarket());
+                            storage.addFirst(marketData);
                         });
 
             }).on(Socket.EVENT_DISCONNECT, args -> System.out.println("Disconnected"));
