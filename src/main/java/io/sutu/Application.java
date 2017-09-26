@@ -2,6 +2,8 @@ package io.sutu;
 
 import io.sutu.DataProcessors.DataAggregatorTask;
 import io.sutu.DataProcessors.DataAggregatorTaskFactory;
+import io.sutu.DataProcessors.IndicatorCalculationTask;
+import io.sutu.DataProcessors.IndicatorCalculationTaskFactory;
 import io.sutu.DataProviders.CryptoCompare.SocketClient;
 import org.springframework.stereotype.Component;
 
@@ -15,10 +17,16 @@ class Application {
 
     private SocketClient socketClient;
     private DataAggregatorTaskFactory dataAggregatorTaskFactory;
+    private IndicatorCalculationTaskFactory indicatorCalculationTaskFactory;
 
-    public Application(SocketClient socketClient, DataAggregatorTaskFactory dataAggregatorTaskFactory) {
+    public Application(
+            SocketClient socketClient,
+            DataAggregatorTaskFactory dataAggregatorTaskFactory,
+            IndicatorCalculationTaskFactory indicatorCalculationTaskFactory
+    ) {
         this.socketClient = socketClient;
         this.dataAggregatorTaskFactory = dataAggregatorTaskFactory;
+        this.indicatorCalculationTaskFactory = indicatorCalculationTaskFactory;
     }
 
     void run() {
@@ -36,10 +44,9 @@ class Application {
         for (String market : markets) {
             DataAggregatorTask dataAggregatorTask = dataAggregatorTaskFactory.newTaskForMarket(market);
             executorService.scheduleAtFixedRate(dataAggregatorTask, delay, period, TimeUnit.SECONDS);
+
+            IndicatorCalculationTask indicatorCalculationTask = indicatorCalculationTaskFactory.newTaskForMarket(market);
+            executorService.scheduleAtFixedRate(indicatorCalculationTask, delay * 2, period, TimeUnit.SECONDS);
         }
-
-        // apply indicators on reformatted data
-
-        // buy / sell
     }
 }
