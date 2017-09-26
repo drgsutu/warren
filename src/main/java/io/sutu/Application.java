@@ -1,7 +1,7 @@
 package io.sutu;
 
-import io.sutu.DataProcessors.TickerAggregatorTask;
-import io.sutu.DataProcessors.TickerAggregatorTaskFactory;
+import io.sutu.DataProcessors.DataAggregatorTask;
+import io.sutu.DataProcessors.DataAggregatorTaskFactory;
 import io.sutu.DataProviders.CryptoCompare.SocketClient;
 import org.springframework.stereotype.Component;
 
@@ -14,11 +14,11 @@ import java.util.concurrent.TimeUnit;
 class Application {
 
     private SocketClient socketClient;
-    private TickerAggregatorTaskFactory tickerAggregatorTaskFactory;
+    private DataAggregatorTaskFactory dataAggregatorTaskFactory;
 
-    public Application(SocketClient socketClient, TickerAggregatorTaskFactory tickerAggregatorTaskFactory) {
+    public Application(SocketClient socketClient, DataAggregatorTaskFactory dataAggregatorTaskFactory) {
         this.socketClient = socketClient;
-        this.tickerAggregatorTaskFactory = tickerAggregatorTaskFactory;
+        this.dataAggregatorTaskFactory = dataAggregatorTaskFactory;
     }
 
     void run() {
@@ -34,8 +34,8 @@ class Application {
         short delay = (short)(300 - (now % 300));
         int period = 300;
         for (String market : markets) {
-            TickerAggregatorTask tickerAggregatorTask = tickerAggregatorTaskFactory.newTaskForMarket(market);
-            executorService.scheduleAtFixedRate(tickerAggregatorTask, delay, period, TimeUnit.SECONDS);
+            DataAggregatorTask dataAggregatorTask = dataAggregatorTaskFactory.newTaskForMarket(market);
+            executorService.scheduleAtFixedRate(dataAggregatorTask, delay, period, TimeUnit.SECONDS);
         }
 
         // apply indicators on reformatted data

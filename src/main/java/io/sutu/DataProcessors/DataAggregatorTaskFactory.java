@@ -7,17 +7,17 @@ import org.springframework.stereotype.Component;
 import java.util.Deque;
 
 @Component
-public class TickerAggregatorTaskFactory {
+public class DataAggregatorTaskFactory {
 
     private StorageFactory storageFactory;
 
-    public TickerAggregatorTaskFactory(StorageFactory storageFactory) {
+    public DataAggregatorTaskFactory(StorageFactory storageFactory) {
         this.storageFactory = storageFactory;
     }
 
-    public TickerAggregatorTask newTaskForMarket(String market) {
+    public DataAggregatorTask newTaskForMarket(String market) {
         Deque<MarketData> rawDataStorage = storageFactory.newRawStorageForMarket(market);
         Deque<OHLC> ohlcStorage = storageFactory.newOHLCStorageForMarket(market);
-        return new TickerAggregatorTask(rawDataStorage, ohlcStorage);
+        return new DataAggregatorTask(rawDataStorage, ohlcStorage);
     }
 }

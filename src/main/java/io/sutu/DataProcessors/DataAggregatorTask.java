@@ -9,12 +9,12 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public class TickerAggregatorTask implements Runnable {
+public class DataAggregatorTask implements Runnable {
 
     private Deque<MarketData> rawDataStorage;
     private Deque<OHLC> ohlcStorage;
 
-    public TickerAggregatorTask(Deque<MarketData> rawDataStorage, Deque<OHLC> ohlcStorage) {
+    public DataAggregatorTask(Deque<MarketData> rawDataStorage, Deque<OHLC> ohlcStorage) {
         this.rawDataStorage = rawDataStorage;
         this.ohlcStorage = ohlcStorage;
     }
