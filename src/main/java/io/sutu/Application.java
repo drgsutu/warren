@@ -25,14 +25,13 @@ class Application {
         String[] markets = {
             "ETHBTC"
         };
-
         socketClient.subscribe(markets);
 
         int cpuCores = Runtime.getRuntime().availableProcessors();
         ScheduledExecutorService executorService = Executors.newScheduledThreadPool(cpuCores);
 
         long now = Instant.now().getEpochSecond();
-        short delay = (short)((now % 300) + 300);
+        short delay = (short)(300 - (now % 300));
         int period = 300;
         for (String market : markets) {
             TickerAggregatorTask tickerAggregatorTask = tickerAggregatorTaskFactory.newTaskForMarket(market);
