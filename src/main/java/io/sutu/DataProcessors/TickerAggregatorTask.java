@@ -11,10 +11,12 @@ import java.util.stream.Collectors;
 
 public class TickerAggregatorTask implements Runnable {
 
-    private Deque<MarketData> storage;
+    private Deque<MarketData> rawDataStorage;
+    private Deque<OHLC> ohlcStorage;
 
-    public TickerAggregatorTask(Deque<MarketData> storage) {
-        this.storage = storage;
+    public TickerAggregatorTask(Deque<MarketData> rawDataStorage, Deque<OHLC> ohlcStorage) {
+        this.rawDataStorage = rawDataStorage;
+        this.ohlcStorage = ohlcStorage;
     }
 
     private static Predicate<MarketData> isNewerThanMoment(long startMoment) {
@@ -29,7 +31,7 @@ public class TickerAggregatorTask implements Runnable {
 
         double high = 0;
         double low = 0;
-        List<MarketData> l = storage.stream()
+        List<MarketData> l = rawDataStorage.stream()
                 .filter(isNewerThanMoment(startMoment))
                 .collect(Collectors.toList());
 
@@ -45,6 +47,9 @@ public class TickerAggregatorTask implements Runnable {
                 low = price;
             }
         }
+
+        OHLC ohlc = new OHLC(open, high, low, close);
+        ohlcStorage.add(ohlc);
 
         System.out.println(String.format("[%s] O: %.8f | H: %.8f | L: %.8f | C: %.8f", new Date(), open, high, low, close));
     }
