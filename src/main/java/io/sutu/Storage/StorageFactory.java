@@ -10,12 +10,13 @@ import java.util.LinkedList;
 @Component
 public class StorageFactory {
 
-    private HashMap<String, Deque<MarketData>> storages = new HashMap<>();
+    private HashMap<String, Deque<MarketData>> rawStorages = new HashMap<>();
 
-    public Deque<MarketData> newStorageForMarket(String market) {
-        if (!this.storages.containsKey(market)) {
-            this.storages.put(market, new LinkedList<>());
+    public Deque<MarketData> newRawStorageForMarket(String market) {
+        if (!this.rawStorages.containsKey(market)) {
+            this.rawStorages.put(market, new LinkedList<>());
         }
-        return this.storages.get(market);
+        return this.rawStorages.get(market);
     }
+
 }

@@ -16,7 +16,7 @@ public class TickerAggregatorTaskFactory {
     }
 
     public TickerAggregatorTask newTaskForMarket(String market) {
-        Deque<MarketData> storage = storageFactory.newStorageForMarket(market);
+        Deque<MarketData> storage = storageFactory.newRawStorageForMarket(market);
         return new TickerAggregatorTask(storage);
     }
 }
