@@ -19,20 +19,20 @@ public class DataAggregatorTask implements Runnable {
         this.ohlcStorage = ohlcStorage;
     }
 
-    private static Predicate<MarketData> isNewerThanMoment(long startMoment) {
-        return item -> item.getLastUpdate() > startMoment;
+    private static Predicate<MarketData> isNewerThanTimestamp(long startTimestamp) {
+        return item -> item.getLastUpdate() > startTimestamp;
     }
 
     @Override
     public void run() {
         long now = Instant.now().getEpochSecond();
         int interval = 300;
-        long startMoment = now - interval;
+        long startTimestamp = now - interval;
 
         double high = 0;
         double low = 0;
         List<MarketData> l = rawDataStorage.stream()
-                .filter(isNewerThanMoment(startMoment))
+                .filter(isNewerThanTimestamp(startTimestamp))
                 .collect(Collectors.toList());
 
         double open = l.get(l.size() - 1).getPrice();
