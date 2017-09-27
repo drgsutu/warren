@@ -6,17 +6,27 @@ import java.time.Instant;
 import java.util.Date;
 import java.util.Deque;
 import java.util.List;
+import java.util.concurrent.BlockingQueue;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class DataAggregatorTask implements Runnable {
 
+    private String market;
     private Deque<MarketData> rawDataStorage;
     private Deque<OHLC> ohlcStorage;
+    private BlockingQueue<String> pipelineState;
 
-    public DataAggregatorTask(Deque<MarketData> rawDataStorage, Deque<OHLC> ohlcStorage) {
+    public DataAggregatorTask(
+            String market,
+            Deque<MarketData> rawDataStorage,
+            Deque<OHLC> ohlcStorage,
+            BlockingQueue pipelineState
+    ) {
+        this.market = market;
         this.rawDataStorage = rawDataStorage;
         this.ohlcStorage = ohlcStorage;
+        this.pipelineState = pipelineState;
     }
 
     private static Predicate<MarketData> isNewerThanTimestamp(long startTimestamp) {
@@ -29,14 +39,14 @@ public class DataAggregatorTask implements Runnable {
         int interval = 300;
         long startTimestamp = now - interval;
 
-        double high = 0;
-        double low = 0;
         List<MarketData> l = rawDataStorage.stream()
                 .filter(isNewerThanTimestamp(startTimestamp))
                 .collect(Collectors.toList());
 
         double open = l.get(l.size() - 1).getPrice();
         double close = l.get(0).getPrice();
+        double high = 0;
+        double low = 0;
         for (MarketData marketData : l) {
             double price = marketData.getPrice();
             if (price > high) {
@@ -50,6 +60,7 @@ public class DataAggregatorTask implements Runnable {
 
         OHLC ohlc = new OHLC(open, high, low, close);
         ohlcStorage.add(ohlc);
+        pipelineState.offer(market);
 
         System.out.println(String.format("[%s] O: %.8f | H: %.8f | L: %.8f | C: %.8f", new Date(), open, high, low, close));
     }

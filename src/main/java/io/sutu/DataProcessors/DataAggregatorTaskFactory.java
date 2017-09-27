@@ -5,6 +5,7 @@ import io.sutu.Storage.StorageFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.Deque;
+import java.util.concurrent.BlockingQueue;
 
 @Component
 public class DataAggregatorTaskFactory {
@@ -18,6 +19,7 @@ public class DataAggregatorTaskFactory {
     public DataAggregatorTask newTaskForMarket(String market) {
         Deque<MarketData> rawDataStorage = storageFactory.newRawStorageForMarket(market);
         Deque<OHLC> ohlcStorage = storageFactory.newOHLCStorageForMarket(market);
-        return new DataAggregatorTask(rawDataStorage, ohlcStorage);
+        BlockingQueue pipelineState = storageFactory.newPipelinesStatesStoragesForMarket(market);
+        return new DataAggregatorTask(market, rawDataStorage, ohlcStorage, pipelineState);
     }
 }
