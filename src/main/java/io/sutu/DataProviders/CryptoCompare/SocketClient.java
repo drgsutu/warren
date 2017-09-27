@@ -30,13 +30,14 @@ public class SocketClient {
 
     public void subscribe(String[] markets) {
         String hostName = "https://streamer.cryptocompare.com";
-        List<String> subscriptions = Stream.of(markets)
-                .map(SocketClient.marketsToSubscriptions::get)
-                .collect(Collectors.toList());
 
         try {
             Socket socket = IO.socket(hostName);
             socket.on(Socket.EVENT_CONNECT, args -> {
+
+                List<String> subscriptions = Stream.of(markets)
+                        .map(SocketClient.marketsToSubscriptions::get)
+                        .collect(Collectors.toList());
 
                 HashMap<String, List<String>> emitParam = new HashMap<>();
                 emitParam.put("subs", subscriptions);
