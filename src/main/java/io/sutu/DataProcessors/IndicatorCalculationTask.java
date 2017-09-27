@@ -19,8 +19,12 @@ public class IndicatorCalculationTask implements Runnable {
 
     @Override
     public void run() {
+        if (ohlcStorage.size() > 14) {
+            return;
+        }
+
         double[] l = ohlcStorage.stream()
-                .limit(14)
+                .skip(ohlcStorage.size() - 14)
                 .mapToDouble(OHLC::getClose)
                 .toArray();
 
@@ -33,6 +37,7 @@ public class IndicatorCalculationTask implements Runnable {
 
         RetCode retCode = core.rsi(startIndex, endIndex, l, periodsLength, begin, length, result);
         System.out.println(String.format("[%s] START RSI", new Date()));
+        System.out.println(l.length);
         for (int i = 0; i < l.length; i++) {
             System.out.println(l[i]);
         }
