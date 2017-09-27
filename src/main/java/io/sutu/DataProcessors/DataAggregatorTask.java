@@ -15,18 +15,18 @@ public class DataAggregatorTask implements Runnable {
     private String market;
     private Deque<MarketData> rawDataStorage;
     private Deque<OHLC> ohlcStorage;
-    private BlockingQueue<String> pipelineState;
+    private BlockingQueue<String> pipelineQueue;
 
     public DataAggregatorTask(
             String market,
             Deque<MarketData> rawDataStorage,
             Deque<OHLC> ohlcStorage,
-            BlockingQueue pipelineState
+            BlockingQueue pipelineQueue
     ) {
         this.market = market;
         this.rawDataStorage = rawDataStorage;
         this.ohlcStorage = ohlcStorage;
-        this.pipelineState = pipelineState;
+        this.pipelineQueue = pipelineQueue;
     }
 
     private static Predicate<MarketData> isNewerThanTimestamp(long startTimestamp) {
@@ -60,7 +60,7 @@ public class DataAggregatorTask implements Runnable {
 
         OHLC ohlc = new OHLC(open, high, low, close);
         ohlcStorage.add(ohlc);
-        pipelineState.offer(market);
+        pipelineQueue.offer(market);
 
         System.out.println(String.format("[%s] O: %.8f | H: %.8f | L: %.8f | C: %.8f", new Date(), open, high, low, close));
     }

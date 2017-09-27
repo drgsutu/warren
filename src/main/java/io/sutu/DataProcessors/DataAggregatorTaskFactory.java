@@ -19,7 +19,8 @@ public class DataAggregatorTaskFactory {
     public DataAggregatorTask newTaskForMarket(String market) {
         Deque<MarketData> rawDataStorage = storageFactory.newRawStorageForMarket(market);
         Deque<OHLC> ohlcStorage = storageFactory.newOHLCStorageForMarket(market);
-        BlockingQueue pipelineState = storageFactory.newPipelinesStatesStoragesForMarket(market);
-        return new DataAggregatorTask(market, rawDataStorage, ohlcStorage, pipelineState);
+        BlockingQueue pipelineQueue = storageFactory.getPipelineQueue();
+
+        return new DataAggregatorTask(market, rawDataStorage, ohlcStorage, pipelineQueue);
     }
 }
