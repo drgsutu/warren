@@ -7,8 +7,6 @@ import org.springframework.stereotype.Component;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
 
 @Component
 public class StorageFactory {
@@ -16,8 +14,6 @@ public class StorageFactory {
     private HashMap<String, Deque<MarketData>> rawStorages = new HashMap<>();
 
     private HashMap<String, Deque<OHLC>> ohlcStorages = new HashMap<>();
-
-    private BlockingQueue<String> pipelineQueue = new LinkedBlockingQueue<>();
 
     public Deque<MarketData> newRawStorageForMarket(String market) {
         if (!this.rawStorages.containsKey(market)) {
@@ -33,9 +29,5 @@ public class StorageFactory {
         }
 
         return this.ohlcStorages.get(market);
-    }
-
-    public BlockingQueue<String> getPipelineQueue() {
-        return this.pipelineQueue;
     }
 }

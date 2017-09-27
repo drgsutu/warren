@@ -16,10 +16,9 @@ public class DataAggregatorTaskFactory {
         this.storageFactory = storageFactory;
     }
 
-    public DataAggregatorTask newTaskForMarket(String market) {
+    public DataAggregatorTask newTaskForMarket(String market, BlockingQueue pipelineQueue) {
         Deque<MarketData> rawDataStorage = storageFactory.newRawStorageForMarket(market);
         Deque<OHLC> ohlcStorage = storageFactory.newOHLCStorageForMarket(market);
-        BlockingQueue pipelineQueue = storageFactory.getPipelineQueue();
 
         return new DataAggregatorTask(market, rawDataStorage, ohlcStorage, pipelineQueue);
     }

@@ -8,9 +8,7 @@ import io.sutu.DataProviders.CryptoCompare.SocketClient;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 @Component
 class Application {
@@ -30,23 +28,34 @@ class Application {
     }
 
     void run() {
+
+        BlockingQueue<String> pipelineQueue = new LinkedBlockingQueue<>();
+
         String[] markets = {
             "ETHBTC"
         };
         socketClient.subscribe(markets);
 
         int cpuCores = Runtime.getRuntime().availableProcessors();
-        ScheduledExecutorService executorService = Executors.newScheduledThreadPool(cpuCores);
+        ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(cpuCores);
+        ExecutorService executorService = Executors.newCachedThreadPool();
 
         int period = 300;
         long now = Instant.now().getEpochSecond();
         long delay = (period - (now % period));
         for (String market : markets) {
-            DataAggregatorTask dataAggregatorTask = dataAggregatorTaskFactory.newTaskForMarket(market);
-            executorService.scheduleAtFixedRate(dataAggregatorTask, delay, period, TimeUnit.SECONDS);
+            DataAggregatorTask dataAggregatorTask = dataAggregatorTaskFactory.newTaskForMarket(market, pipelineQueue);
+            scheduledExecutorService.scheduleAtFixedRate(dataAggregatorTask, delay, period, TimeUnit.SECONDS);
+        }
 
-            IndicatorCalculationTask indicatorCalculationTask = indicatorCalculationTaskFactory.newTaskForMarket(market);
-            executorService.scheduleAtFixedRate(indicatorCalculationTask, delay * 2, period, TimeUnit.SECONDS);
+        while (true) {
+            try {
+                String market = pipelineQueue.take();
+                IndicatorCalculationTask indicatorCalculationTask = indicatorCalculationTaskFactory.newTaskForMarket(market);
+                executorService.submit(indicatorCalculationTask);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 }
