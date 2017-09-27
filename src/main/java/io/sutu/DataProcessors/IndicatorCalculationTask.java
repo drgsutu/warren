@@ -1,11 +1,11 @@
 package io.sutu.DataProcessors;
 
 import com.tictactec.ta.lib.Core;
+import com.tictactec.ta.lib.MInteger;
 import com.tictactec.ta.lib.RetCode;
 
+import java.util.Date;
 import java.util.Deque;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class IndicatorCalculationTask implements Runnable {
 
@@ -19,12 +19,30 @@ public class IndicatorCalculationTask implements Runnable {
 
     @Override
     public void run() {
-        List<Double> l = ohlcStorage.stream()
+        double[] l = ohlcStorage.stream()
                 .limit(14)
-                .map(item -> item.getClose())
-                .collect(Collectors.toList());
+                .mapToDouble(OHLC::getClose)
+                .toArray();
 
-//        RetCode retCode = core.rsi();
+        int startIndex = 0;
+        int endIndex = 0;
+        int periodsLength = 14;
+        MInteger begin = new MInteger();
+        MInteger length = new MInteger();
+        double[] result = {};
 
+        RetCode retCode = core.rsi(startIndex, endIndex, l, periodsLength, begin, length, result);
+        System.out.println(String.format("[%s] START RSI", new Date()));
+        for (int i = 0; i < l.length; i++) {
+            System.out.println(l[i]);
+        }
+        System.out.println(retCode);
+        System.out.println(begin.value);
+        System.out.println(length.value);
+        System.out.println(result.length);
+        for (int i = 0; i < result.length; i++) {
+            System.out.println(result[i]);
+        }
+        System.out.println(String.format("[%s] END RSI", new Date()));
     }
 }
