@@ -38,9 +38,9 @@ class Application {
         int cpuCores = Runtime.getRuntime().availableProcessors();
         ScheduledExecutorService executorService = Executors.newScheduledThreadPool(cpuCores);
 
-        long now = Instant.now().getEpochSecond();
-        short delay = (short)(300 - (now % 300));
         int period = 300;
+        long now = Instant.now().getEpochSecond();
+        long delay = (period - (now % period));
         for (String market : markets) {
             DataAggregatorTask dataAggregatorTask = dataAggregatorTaskFactory.newTaskForMarket(market);
             executorService.scheduleAtFixedRate(dataAggregatorTask, delay, period, TimeUnit.SECONDS);
