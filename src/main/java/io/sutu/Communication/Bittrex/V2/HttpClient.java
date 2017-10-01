@@ -1,38 +1,37 @@
-package io.sutu.DataProviders.Bittrex.Communications;
+package io.sutu.Communication.Bittrex.V2;
 
 import org.apache.http.client.fluent.Request;
 import org.apache.http.client.utils.URIBuilder;
-import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-@Service
-public class BittrexClient {
+public class HttpClient {
 
-    public String getTicker(String market) throws BittrexClientException {
+    public String getTicker(String market) throws HttpClientException {
         URI url = buildURLWithParams(market);
 
         try {
             return Request.Get(url).execute().returnContent().asString();
         } catch (IOException e) {
-            throw new BittrexClientException(e.getMessage(), e);
+            throw new HttpClientException(e.getMessage(), e);
         }
     }
 
-    private URI buildURLWithParams(String market) throws BittrexClientException {
+    private URI buildURLWithParams(String market) throws HttpClientException {
         try {
             URIBuilder builder = new URIBuilder()
                     .setScheme("https")
                     .setHost("bittrex.com")
-                    .setPath("/api/v1.1/public/getticker")
-                    .setParameter("market", market);
+                    .setPath("/Api/v2.0/pub/market/GetLatestTick")
+                    .setParameter("marketName", market)
+                    .setParameter("tickInterval", "oneMin");
 
             return builder.build();
 
         } catch (URISyntaxException e) {
-            throw new BittrexClientException(e.getMessage(), e);
+            throw new HttpClientException(e.getMessage(), e);
         }
     }
 }

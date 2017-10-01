@@ -1,4 +1,4 @@
-package io.sutu.DataProviders.CryptoCompare;
+package io.sutu.Communication.CryptoCompare;
 
 import io.socket.client.IO;
 import io.socket.client.Socket;
@@ -32,8 +32,7 @@ public class SocketClient {
     }
 
     public void subscribe(String[] markets) {
-        BlockingQueue<Trade> rawDataToBeAggregatedQueue = pipelineQueuesFactory.getRawDataToBeAggregatedQueue();
-        BlockingQueue<Trade> rawDataToBeStoredQueue = pipelineQueuesFactory.getRawDataToBeStoredQueue();
+        List<BlockingQueue<Trade>> rawDataQueues = pipelineQueuesFactory.getRawDataQueues();
 
         URI uri = null;
         try {
@@ -57,8 +56,9 @@ public class SocketClient {
                     .forEach(line -> {
                         Trade trade = unpack((String) line);
                         try {
-                            rawDataToBeAggregatedQueue.put(trade);
-                            rawDataToBeStoredQueue.put(trade);
+                            for (BlockingQueue<Trade> rawDataQueue : rawDataQueues) {
+                                rawDataQueue.put(trade);
+                            }
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
