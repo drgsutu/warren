@@ -20,7 +20,7 @@ public class IndicatorCalculatorTask implements Runnable {
 
     @Override
     public void run() {
-        while (true) {
+        while (!Thread.interrupted()) {
             List<Tick> ticks = new ArrayList<>();
 
             try {
@@ -28,7 +28,7 @@ public class IndicatorCalculatorTask implements Runnable {
                 System.out.println(tick);
                 ticks.add(tick);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                System.out.println("Interrupted: " + getClass().getName());
             }
 
             int indicatorTimeFrame = 9;

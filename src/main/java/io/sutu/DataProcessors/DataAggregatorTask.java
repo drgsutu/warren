@@ -22,13 +22,13 @@ public class DataAggregatorTask implements Runnable {
 
     @Override
     public void run() {
+        // TODO: first tick is incomplete so it should not be put in the queue
         int interval = 60;
         Duration tickTimePeriod = Duration.ofSeconds(interval);
         long currentTickEndTimeStamp = 0;
         Tick tick = null;
 
-        while (true) {
-
+        while (!Thread.interrupted()) {
             try {
                 Trade trade = rawDataQueue.take();
 
@@ -59,7 +59,7 @@ public class DataAggregatorTask implements Runnable {
                 tick.addTrade(trade.getVolume(), trade.getPrice());
 
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                System.out.println("Interrupted: " + getClass().getName());
             }
         }
     }

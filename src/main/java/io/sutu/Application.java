@@ -4,7 +4,7 @@ import io.sutu.DataProcessors.DataAggregatorTask;
 import io.sutu.DataProcessors.DataAggregatorTaskFactory;
 import io.sutu.DataProcessors.IndicatorCalculatorTask;
 import io.sutu.DataProcessors.IndicatorCalculatorTaskFactory;
-import io.sutu.DataProviders.CryptoCompare.SocketClient;
+import io.sutu.Communication.CryptoCompare.SocketClient;
 import io.sutu.Storage.CsvFileWriterTask;
 import io.sutu.Storage.CsvFileWriterTaskFactory;
 import org.springframework.stereotype.Component;
@@ -45,14 +45,16 @@ class Application {
 
         // aggregate the data into OHLCV ticks
         DataAggregatorTask dataAggregatorTask = dataAggregatorTaskFactory.newTask();
-        executorService.execute(dataAggregatorTask);
+        executorService.submit(dataAggregatorTask);
 
         // save data to file
         CsvFileWriterTask csvFileWriterTask = csvFileWriterTaskFactory.newTask();
-        executorService.execute(csvFileWriterTask);
+        executorService.submit(csvFileWriterTask);
 
         // calculate indicators
         IndicatorCalculatorTask indicatorCalculatorTask = indicatorCalculatorTaskFactory.newTask();
-        executorService.execute(indicatorCalculatorTask);
+        executorService.submit(indicatorCalculatorTask);
+
+        Runtime.getRuntime().addShutdownHook(new Thread(executorService::shutdownNow));
     }
 }
