@@ -1,25 +1,24 @@
 package io.sutu.DataProcessors;
 
-import io.sutu.DataProviders.CryptoCompare.MarketData;
-import io.sutu.Storage.StorageFactory;
+import eu.verdelhan.ta4j.Tick;
+import io.sutu.Trade;
+import io.sutu.PipelineQueuesFactory;
 import org.springframework.stereotype.Component;
 
-import java.util.Deque;
 import java.util.concurrent.BlockingQueue;
 
 @Component
 public class DataAggregatorTaskFactory {
 
-    private StorageFactory storageFactory;
+    private BlockingQueue<Trade> rawDataQueue;
+    private BlockingQueue<Tick> aggregatedDataQueue;
 
-    public DataAggregatorTaskFactory(StorageFactory storageFactory) {
-        this.storageFactory = storageFactory;
+    public DataAggregatorTaskFactory(PipelineQueuesFactory pipelineQueuesFactory) {
+        this.rawDataQueue = pipelineQueuesFactory.getRawDataToBeAggregatedQueue();
+        this.aggregatedDataQueue = pipelineQueuesFactory.getAggregatedDataQueue();
     }
 
-    public DataAggregatorTask newTaskForMarket(String market, BlockingQueue pipelineQueue) {
-        Deque<MarketData> rawDataStorage = storageFactory.newRawStorageForMarket(market);
-        Deque<OHLC> ohlcStorage = storageFactory.newOHLCStorageForMarket(market);
-
-        return new DataAggregatorTask(market, rawDataStorage, ohlcStorage, pipelineQueue);
+    public DataAggregatorTask newTask() {
+        return new DataAggregatorTask(rawDataQueue, aggregatedDataQueue);
     }
 }

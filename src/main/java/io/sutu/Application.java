@@ -2,60 +2,48 @@ package io.sutu;
 
 import io.sutu.DataProcessors.DataAggregatorTask;
 import io.sutu.DataProcessors.DataAggregatorTaskFactory;
-import io.sutu.DataProcessors.IndicatorCalculationTask;
-import io.sutu.DataProcessors.IndicatorCalculationTaskFactory;
+import io.sutu.DataProcessors.IndicatorCalculatorTask;
+import io.sutu.DataProcessors.IndicatorCalculatorTaskFactory;
 import io.sutu.DataProviders.CryptoCompare.SocketClient;
 import org.springframework.stereotype.Component;
 
-import java.time.Instant;
-import java.util.concurrent.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @Component
 class Application {
 
     private SocketClient socketClient;
     private DataAggregatorTaskFactory dataAggregatorTaskFactory;
-    private IndicatorCalculationTaskFactory indicatorCalculationTaskFactory;
+    private IndicatorCalculatorTaskFactory indicatorCalculatorTaskFactory;
 
     public Application(
             SocketClient socketClient,
             DataAggregatorTaskFactory dataAggregatorTaskFactory,
-            IndicatorCalculationTaskFactory indicatorCalculationTaskFactory
+            IndicatorCalculatorTaskFactory indicatorCalculatorTaskFactory
     ) {
         this.socketClient = socketClient;
         this.dataAggregatorTaskFactory = dataAggregatorTaskFactory;
-        this.indicatorCalculationTaskFactory = indicatorCalculationTaskFactory;
+        this.indicatorCalculatorTaskFactory = indicatorCalculatorTaskFactory;
     }
 
     void run() {
 
-        BlockingQueue<String> pipelineQueue = new LinkedBlockingQueue<>();
-
         String[] markets = {
-            "ETHBTC"
+            "NEO-BTC"
+//            "ETH-BTC"
         };
+        // get the data
         socketClient.subscribe(markets);
 
-        int cpuCores = Runtime.getRuntime().availableProcessors();
-        ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(cpuCores);
-        ExecutorService executorService = Executors.newCachedThreadPool();
+        ExecutorService executorService = Executors.newFixedThreadPool(3);
 
-        int period = 300;
-        long now = Instant.now().getEpochSecond();
-        long delay = (period - (now % period));
-        for (String market : markets) {
-            DataAggregatorTask dataAggregatorTask = dataAggregatorTaskFactory.newTaskForMarket(market, pipelineQueue);
-            scheduledExecutorService.scheduleAtFixedRate(dataAggregatorTask, delay, period, TimeUnit.SECONDS);
-        }
+        // aggregate the data into OHLCV ticks
+        DataAggregatorTask dataAggregatorTask = dataAggregatorTaskFactory.newTask();
+        executorService.execute(dataAggregatorTask);
 
-        while (true) {
-            try {
-                String market = pipelineQueue.take();
-                IndicatorCalculationTask indicatorCalculationTask = indicatorCalculationTaskFactory.newTaskForMarket(market);
-                executorService.submit(indicatorCalculationTask);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
+        // calculate indicators
+        IndicatorCalculatorTask indicatorCalculatorTask = indicatorCalculatorTaskFactory.newTask();
+        executorService.execute(indicatorCalculatorTask);
     }
 }
