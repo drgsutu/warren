@@ -10,12 +10,12 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.concurrent.BlockingQueue;
 
-public class DataAggregatorTask implements Runnable {
+public class TradesAggregatorTask implements Runnable {
 
     private final BlockingQueue<Trade> rawDataQueue;
     private final BlockingQueue<Tick> aggregatedDataQueue;
 
-    DataAggregatorTask(BlockingQueue<Trade> rawDataQueue, BlockingQueue<Tick> aggregatedDataQueue) {
+    TradesAggregatorTask(BlockingQueue<Trade> rawDataQueue, BlockingQueue<Tick> aggregatedDataQueue) {
         this.rawDataQueue = rawDataQueue;
         this.aggregatedDataQueue = aggregatedDataQueue;
     }

@@ -8,17 +8,17 @@ import org.springframework.stereotype.Component;
 import java.util.concurrent.BlockingQueue;
 
 @Component
-public class DataAggregatorTaskFactory {
+public class TradesAggregatorTaskFactory {
 
     private BlockingQueue<Trade> rawDataQueue;
     private BlockingQueue<Tick> aggregatedDataQueue;
 
-    public DataAggregatorTaskFactory(PipelineQueuesFactory pipelineQueuesFactory) {
+    public TradesAggregatorTaskFactory(PipelineQueuesFactory pipelineQueuesFactory) {
         this.rawDataQueue = pipelineQueuesFactory.getRawDataToBeAggregatedQueue();
         this.aggregatedDataQueue = pipelineQueuesFactory.getAggregatedDataQueue();
     }
 
-    public DataAggregatorTask newTask() {
-        return new DataAggregatorTask(rawDataQueue, aggregatedDataQueue);
+    public TradesAggregatorTask newTask() {
+        return new TradesAggregatorTask(rawDataQueue, aggregatedDataQueue);
     }
 }

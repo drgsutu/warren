@@ -1,7 +1,7 @@
 package io.sutu.warren;
 
-import io.sutu.warren.DataProcessors.DataAggregatorTask;
-import io.sutu.warren.DataProcessors.DataAggregatorTaskFactory;
+import io.sutu.warren.DataProcessors.TradesAggregatorTask;
+import io.sutu.warren.DataProcessors.TradesAggregatorTaskFactory;
 import io.sutu.warren.DataProcessors.IndicatorCalculatorTask;
 import io.sutu.warren.DataProcessors.IndicatorCalculatorTaskFactory;
 import io.sutu.warren.Communication.CryptoCompare.SocketClient;
@@ -16,18 +16,18 @@ import java.util.concurrent.Executors;
 class Application {
 
     private SocketClient socketClient;
-    private DataAggregatorTaskFactory dataAggregatorTaskFactory;
+    private TradesAggregatorTaskFactory tradesAggregatorTaskFactory;
     private CsvFileWriterTaskFactory csvFileWriterTaskFactory;
     private IndicatorCalculatorTaskFactory indicatorCalculatorTaskFactory;
 
     public Application(
             SocketClient socketClient,
-            DataAggregatorTaskFactory dataAggregatorTaskFactory,
+            TradesAggregatorTaskFactory tradesAggregatorTaskFactory,
             CsvFileWriterTaskFactory csvFileWriterTaskFactory,
             IndicatorCalculatorTaskFactory indicatorCalculatorTaskFactory
     ) {
         this.socketClient = socketClient;
-        this.dataAggregatorTaskFactory = dataAggregatorTaskFactory;
+        this.tradesAggregatorTaskFactory = tradesAggregatorTaskFactory;
         this.csvFileWriterTaskFactory = csvFileWriterTaskFactory;
         this.indicatorCalculatorTaskFactory = indicatorCalculatorTaskFactory;
     }
@@ -44,8 +44,8 @@ class Application {
         ExecutorService executorService = Executors.newFixedThreadPool(3);
 
         // aggregate the data into OHLCV ticks
-        DataAggregatorTask dataAggregatorTask = dataAggregatorTaskFactory.newTask();
-        executorService.submit(dataAggregatorTask);
+        TradesAggregatorTask tradesAggregatorTask = tradesAggregatorTaskFactory.newTask();
+        executorService.submit(tradesAggregatorTask);
 
         // save data to file
         CsvFileWriterTask csvFileWriterTask = csvFileWriterTaskFactory.newTask();
