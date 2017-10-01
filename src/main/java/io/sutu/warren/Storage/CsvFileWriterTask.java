@@ -20,7 +20,7 @@ public class CsvFileWriterTask implements Runnable {
 
     @Override
     public void run() {
-        String path = "trades2.csv";
+        String path = "trades.csv";
         try (
                 BufferedWriter bufferedWriter = Files.newBufferedWriter(Paths.get(path), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
                 PrintWriter writer = new PrintWriter(bufferedWriter)
@@ -36,7 +36,6 @@ public class CsvFileWriterTask implements Runnable {
                             Double.toString(trade.getVolume())
                     );
                     writer.println(csvLine);
-                    System.out.println("Wrote to buffer: " + csvLine);
                 }
             } catch (InterruptedException e) {
                 System.out.println("Interrupted: " + getClass().getName());
