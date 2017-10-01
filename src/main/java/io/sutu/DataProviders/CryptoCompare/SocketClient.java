@@ -33,6 +33,7 @@ public class SocketClient {
 
     public void subscribe(String[] markets) {
         BlockingQueue<Trade> rawDataToBeAggregatedQueue = pipelineQueuesFactory.getRawDataToBeAggregatedQueue();
+        BlockingQueue<Trade> rawDataToBeStoredQueue = pipelineQueuesFactory.getRawDataToBeStoredQueue();
 
         URI uri = null;
         try {
@@ -57,6 +58,7 @@ public class SocketClient {
                         Trade trade = unpack((String) line);
                         try {
                             rawDataToBeAggregatedQueue.put(trade);
+                            rawDataToBeStoredQueue.put(trade);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }

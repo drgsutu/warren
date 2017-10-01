@@ -10,10 +10,15 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class PipelineQueuesFactory {
 
     private BlockingQueue<Trade> rawDataToBeAggregatedQueue =  new LinkedBlockingQueue<>();
+    private BlockingQueue<Trade> rawDataToBeStoredQueue =  new LinkedBlockingQueue<>();
     private BlockingQueue<Tick> aggregatedDataQueue =  new LinkedBlockingQueue<>();
 
     public BlockingQueue<Trade> getRawDataToBeAggregatedQueue() {
         return rawDataToBeAggregatedQueue;
+    }
+
+    public BlockingQueue<Trade> getRawDataToBeStoredQueue() {
+        return rawDataToBeStoredQueue;
     }
 
     public BlockingQueue<Tick> getAggregatedDataQueue() {
