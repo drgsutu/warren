@@ -1,9 +1,9 @@
-package io.sutu.Communication.CryptoCompare;
+package io.sutu.warren.Communication.CryptoCompare;
 
 import io.socket.client.IO;
 import io.socket.client.Socket;
-import io.sutu.PipelineQueuesFactory;
-import io.sutu.Trade;
+import io.sutu.warren.PipelineQueuesFactory;
+import io.sutu.warren.Trade;
 import org.springframework.stereotype.Component;
 
 import java.net.URI;

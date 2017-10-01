@@ -1,6 +1,6 @@
-package io.sutu.Storage;
+package io.sutu.warren.Storage;
 
-import io.sutu.Trade;
+import io.sutu.warren.Trade;
 
 import java.io.BufferedWriter;
 import java.io.IOException;

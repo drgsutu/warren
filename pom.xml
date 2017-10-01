@@ -35,7 +35,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>io.sutu.Warren</mainClass>
+                            <mainClass>io.sutu.warren.Warren</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>

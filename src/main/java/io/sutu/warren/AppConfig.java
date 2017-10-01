@@ -1,4 +1,4 @@
-package io.sutu;
+package io.sutu.warren;
 
 import com.google.gson.Gson;
 import org.springframework.context.annotation.Bean;

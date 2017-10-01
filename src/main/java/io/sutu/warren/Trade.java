@@ -1,4 +1,4 @@
-package io.sutu;
+package io.sutu.warren;
 
 public class Trade {
 

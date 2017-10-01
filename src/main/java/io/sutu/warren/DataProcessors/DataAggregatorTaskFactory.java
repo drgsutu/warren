@@ -1,8 +1,8 @@
-package io.sutu.DataProcessors;
+package io.sutu.warren.DataProcessors;
 
 import eu.verdelhan.ta4j.Tick;
-import io.sutu.Trade;
-import io.sutu.PipelineQueuesFactory;
+import io.sutu.warren.Trade;
+import io.sutu.warren.PipelineQueuesFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.concurrent.BlockingQueue;

@@ -1,4 +1,4 @@
-package io.sutu;
+package io.sutu.warren;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;

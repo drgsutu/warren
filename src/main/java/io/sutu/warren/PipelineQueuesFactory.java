@@ -1,4 +1,4 @@
-package io.sutu;
+package io.sutu.warren;
 
 import eu.verdelhan.ta4j.Tick;
 import org.springframework.stereotype.Component;

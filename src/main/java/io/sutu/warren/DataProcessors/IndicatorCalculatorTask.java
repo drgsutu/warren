@@ -1,4 +1,4 @@
-package io.sutu.DataProcessors;
+package io.sutu.warren.DataProcessors;
 
 import eu.verdelhan.ta4j.BaseTimeSeries;
 import eu.verdelhan.ta4j.Tick;

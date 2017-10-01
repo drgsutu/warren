@@ -1,8 +1,8 @@
-package io.sutu.DataProcessors;
+package io.sutu.warren.DataProcessors;
 
 import eu.verdelhan.ta4j.BaseTick;
 import eu.verdelhan.ta4j.Tick;
-import io.sutu.Trade;
+import io.sutu.warren.Trade;
 
 import java.time.Duration;
 import java.time.Instant;

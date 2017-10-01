@@ -1,7 +1,7 @@
-package io.sutu.Storage;
+package io.sutu.warren.Storage;
 
-import io.sutu.PipelineQueuesFactory;
-import io.sutu.Trade;
+import io.sutu.warren.PipelineQueuesFactory;
+import io.sutu.warren.Trade;
 import org.springframework.stereotype.Component;
 
 import java.util.concurrent.BlockingQueue;

@@ -1,12 +1,12 @@
-package io.sutu;
+package io.sutu.warren;
 
-import io.sutu.DataProcessors.DataAggregatorTask;
-import io.sutu.DataProcessors.DataAggregatorTaskFactory;
-import io.sutu.DataProcessors.IndicatorCalculatorTask;
-import io.sutu.DataProcessors.IndicatorCalculatorTaskFactory;
-import io.sutu.Communication.CryptoCompare.SocketClient;
-import io.sutu.Storage.CsvFileWriterTask;
-import io.sutu.Storage.CsvFileWriterTaskFactory;
+import io.sutu.warren.DataProcessors.DataAggregatorTask;
+import io.sutu.warren.DataProcessors.DataAggregatorTaskFactory;
+import io.sutu.warren.DataProcessors.IndicatorCalculatorTask;
+import io.sutu.warren.DataProcessors.IndicatorCalculatorTaskFactory;
+import io.sutu.warren.Communication.CryptoCompare.SocketClient;
+import io.sutu.warren.Storage.CsvFileWriterTask;
+import io.sutu.warren.Storage.CsvFileWriterTaskFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.concurrent.ExecutorService;
