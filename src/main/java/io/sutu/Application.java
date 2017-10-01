@@ -55,6 +55,12 @@ class Application {
         IndicatorCalculatorTask indicatorCalculatorTask = indicatorCalculatorTaskFactory.newTask();
         executorService.submit(indicatorCalculatorTask);
 
-        Runtime.getRuntime().addShutdownHook(new Thread(executorService::shutdownNow));
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            executorService.shutdownNow();
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+            }
+        }));
     }
 }
