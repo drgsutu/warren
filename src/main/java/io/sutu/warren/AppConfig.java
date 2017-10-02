@@ -6,7 +6,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@ComponentScan("io.sutu")
+@ComponentScan("io.sutu.warren")
 public class AppConfig {
 
     @Bean
