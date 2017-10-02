@@ -20,9 +20,17 @@ public class IndicatorCalculatorTask implements Runnable {
 
     @Override
     public void run() {
-        while (!Thread.interrupted()) {
-            List<Tick> ticks = new ArrayList<>();
+        // TODO: move this to a config
+        int indicatorTimeFrame = 5;
+        // TODO: move this as param
+        String timeSeriesName = "NEO-BTC";
 
+        List<Tick> ticks = new ArrayList<>();
+        TimeSeries timeSeries = new BaseTimeSeries(timeSeriesName, ticks);
+        ClosePriceIndicator closePriceIndicator = new ClosePriceIndicator(timeSeries);
+        SMAIndicator sma = new SMAIndicator(closePriceIndicator, indicatorTimeFrame);
+
+        while (!Thread.interrupted()) {
             try {
                 Tick tick = aggregatedDataQueue.take();
                 System.out.println(tick);
@@ -31,16 +39,12 @@ public class IndicatorCalculatorTask implements Runnable {
                 System.out.println("Interrupted: " + getClass().getName());
             }
 
-            int indicatorTimeFrame = 9;
+            // do not calculate until we have the minimum historical data for the indicator calculation
             if (ticks.size() < indicatorTimeFrame) {
                 continue;
             }
 
-            TimeSeries timeSeries = new BaseTimeSeries("NEW-BTC", ticks);
-            ClosePriceIndicator closePrice = new ClosePriceIndicator(timeSeries);
-            SMAIndicator sma = new SMAIndicator(closePrice, indicatorTimeFrame);
-            System.out.println(sma);
-            System.out.println(sma.getValue(indicatorTimeFrame - 1));
+            System.out.println(sma.getValue(ticks.size() - 1));
         }
     }
 }
