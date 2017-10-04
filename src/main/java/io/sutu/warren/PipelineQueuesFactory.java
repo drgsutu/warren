@@ -15,6 +15,7 @@ public class PipelineQueuesFactory {
     private BlockingQueue<Trade> rawDataToBeStoredQueue =  new LinkedBlockingQueue<>();
     private List<BlockingQueue<Trade>> rawDataQueues = Arrays.asList(rawDataToBeAggregatedQueue, rawDataToBeStoredQueue);
     private BlockingQueue<Tick> aggregatedDataQueue =  new LinkedBlockingQueue<>();
+    private BlockingQueue<IndicatorValue> indicatorsValuesQueue = new LinkedBlockingQueue<>();
 
     public BlockingQueue<Trade> getRawDataToBeAggregatedQueue() {
         return rawDataToBeAggregatedQueue;
@@ -30,5 +31,9 @@ public class PipelineQueuesFactory {
 
     public BlockingQueue<Tick> getAggregatedDataQueue() {
         return aggregatedDataQueue;
+    }
+
+    public BlockingQueue<IndicatorValue> getIndicatorsValuesQueue() {
+        return indicatorsValuesQueue;
     }
 }

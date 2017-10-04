@@ -15,6 +15,10 @@ import java.util.concurrent.Executors;
 @Component
 class Application {
 
+    static final String[] MARKETS = {
+            "NEO-BTC"
+    };
+
     private SocketClient socketClient;
     private TradesAggregatorTaskFactory tradesAggregatorTaskFactory;
     private CsvFileWriterTaskFactory csvFileWriterTaskFactory;
@@ -33,13 +37,8 @@ class Application {
     }
 
     void run() {
-
-        String[] markets = {
-            "NEO-BTC"
-//            "ETH-BTC"
-        };
         // get the data
-        socketClient.subscribe(markets);
+        socketClient.subscribe(MARKETS);
 
         ExecutorService executorService = Executors.newFixedThreadPool(3);
 

@@ -5,6 +5,7 @@ import eu.verdelhan.ta4j.Tick;
 import eu.verdelhan.ta4j.TimeSeries;
 import eu.verdelhan.ta4j.indicators.SMAIndicator;
 import eu.verdelhan.ta4j.indicators.helpers.ClosePriceIndicator;
+import io.sutu.warren.IndicatorValue;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,9 +14,14 @@ import java.util.concurrent.BlockingQueue;
 public class IndicatorCalculatorTask implements Runnable {
 
     private BlockingQueue<Tick> aggregatedDataQueue;
+    private BlockingQueue<IndicatorValue> indicatorsValuesQueue;
 
-    IndicatorCalculatorTask(BlockingQueue<Tick> aggregatedDataQueue) {
+    IndicatorCalculatorTask(
+            BlockingQueue<Tick> aggregatedDataQueue,
+            BlockingQueue<IndicatorValue> indicatorsValuesQueue
+    ) {
         this.aggregatedDataQueue = aggregatedDataQueue;
+        this.indicatorsValuesQueue = indicatorsValuesQueue;
     }
 
     @Override
@@ -23,10 +29,10 @@ public class IndicatorCalculatorTask implements Runnable {
         // TODO: move this to a config
         int indicatorTimeFrame = 5;
         // TODO: move this as param
-        String timeSeriesName = "NEO-BTC";
+        String market = "NEO-BTC";
 
         List<Tick> ticks = new ArrayList<>();
-        TimeSeries timeSeries = new BaseTimeSeries(timeSeriesName, ticks);
+        TimeSeries timeSeries = new BaseTimeSeries(market, ticks);
         ClosePriceIndicator closePriceIndicator = new ClosePriceIndicator(timeSeries);
         SMAIndicator sma = new SMAIndicator(closePriceIndicator, indicatorTimeFrame);
 
@@ -44,7 +50,14 @@ public class IndicatorCalculatorTask implements Runnable {
                 continue;
             }
 
-            System.out.println(sma.getValue(ticks.size() - 1));
+            double value = sma.getValue(ticks.size() - 1).toDouble();
+            Tick lastTick = ticks.get(ticks.size() - 1);
+            IndicatorValue indicatorValue = new IndicatorValue("SMA", market, value, lastTick.getEndTime());
+            try {
+                indicatorsValuesQueue.put(indicatorValue);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 }
