@@ -10,15 +10,15 @@ import java.util.concurrent.BlockingQueue;
 @Component
 public class IndicatorCalculatorTaskFactory {
 
-    private final BlockingQueue<Tick> aggregatedDataQueue;
+    private final BlockingQueue<Tick> OHLCVQueue;
     private final BlockingQueue<IndicatorValue> indicatorsValuesQueue;
 
     public IndicatorCalculatorTaskFactory(PipelineQueuesFactory pipelineQueuesFactory) {
-        this.aggregatedDataQueue = pipelineQueuesFactory.getAggregatedDataQueue();
+        this.OHLCVQueue = pipelineQueuesFactory.getOHLCVQueue();
         this.indicatorsValuesQueue = pipelineQueuesFactory.getIndicatorsValuesQueue();
     }
 
     public IndicatorCalculatorTask newTask() {
-        return new IndicatorCalculatorTask(aggregatedDataQueue, indicatorsValuesQueue);
+        return new IndicatorCalculatorTask(OHLCVQueue, indicatorsValuesQueue);
     }
 }

@@ -13,14 +13,14 @@ import java.util.concurrent.BlockingQueue;
 
 public class IndicatorCalculatorTask implements Runnable {
 
-    private BlockingQueue<Tick> aggregatedDataQueue;
+    private BlockingQueue<Tick> OHLCVQueue;
     private BlockingQueue<IndicatorValue> indicatorsValuesQueue;
 
     IndicatorCalculatorTask(
-            BlockingQueue<Tick> aggregatedDataQueue,
+            BlockingQueue<Tick> OHLCVQueue,
             BlockingQueue<IndicatorValue> indicatorsValuesQueue
     ) {
-        this.aggregatedDataQueue = aggregatedDataQueue;
+        this.OHLCVQueue = OHLCVQueue;
         this.indicatorsValuesQueue = indicatorsValuesQueue;
     }
 
@@ -38,7 +38,7 @@ public class IndicatorCalculatorTask implements Runnable {
 
         while (!Thread.interrupted()) {
             try {
-                Tick tick = aggregatedDataQueue.take();
+                Tick tick = OHLCVQueue.take();
                 System.out.println(tick);
                 ticks.add(tick);
             } catch (InterruptedException e) {

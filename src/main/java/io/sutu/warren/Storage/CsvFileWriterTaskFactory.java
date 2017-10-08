@@ -9,13 +9,13 @@ import java.util.concurrent.BlockingQueue;
 @Component
 public class CsvFileWriterTaskFactory {
 
-    private final BlockingQueue<Trade> rawDataToBeStoredQueue;
+    private final BlockingQueue<Trade> tradesToBeStoredQueue;
 
     public CsvFileWriterTaskFactory(PipelineQueuesFactory pipelineQueuesFactory) {
-        this.rawDataToBeStoredQueue = pipelineQueuesFactory.getRawDataToBeStoredQueue();
+        this.tradesToBeStoredQueue = pipelineQueuesFactory.getTradesToBeStoredQueue();
     }
 
     public CsvFileWriterTask newTask() {
-        return new CsvFileWriterTask(rawDataToBeStoredQueue);
+        return new CsvFileWriterTask(tradesToBeStoredQueue);
     }
 }

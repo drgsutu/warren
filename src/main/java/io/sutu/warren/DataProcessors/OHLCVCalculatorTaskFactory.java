@@ -10,15 +10,15 @@ import java.util.concurrent.BlockingQueue;
 @Component
 public class OHLCVCalculatorTaskFactory {
 
-    private BlockingQueue<Trade> rawDataQueue;
-    private BlockingQueue<Tick> aggregatedDataQueue;
+    private BlockingQueue<Trade> tradesToBeAggregatedQueue;
+    private BlockingQueue<Tick> OHLCVQueue;
 
     public OHLCVCalculatorTaskFactory(PipelineQueuesFactory pipelineQueuesFactory) {
-        this.rawDataQueue = pipelineQueuesFactory.getRawDataToBeAggregatedQueue();
-        this.aggregatedDataQueue = pipelineQueuesFactory.getAggregatedDataQueue();
+        this.tradesToBeAggregatedQueue = pipelineQueuesFactory.getTradesToBeAggregatedQueue();
+        this.OHLCVQueue = pipelineQueuesFactory.getOHLCVQueue();
     }
 
     public OHLCVCalculatorTask newTaskForInterval(int interval) {
-        return new OHLCVCalculatorTask(rawDataQueue, aggregatedDataQueue, interval);
+        return new OHLCVCalculatorTask(tradesToBeAggregatedQueue, OHLCVQueue, interval);
     }
 }

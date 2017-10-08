@@ -32,7 +32,7 @@ public class SocketClient {
     }
 
     public void subscribe(String[] markets) {
-        List<BlockingQueue<Trade>> rawDataQueues = pipelineQueuesFactory.getRawDataQueues();
+        List<BlockingQueue<Trade>> tradesQueues = pipelineQueuesFactory.getTradesQueues();
 
         URI uri = null;
         try {
@@ -56,8 +56,8 @@ public class SocketClient {
                     .forEach(line -> {
                         Trade trade = unpack((String) line);
                         try {
-                            for (BlockingQueue<Trade> rawDataQueue : rawDataQueues) {
-                                rawDataQueue.put(trade);
+                            for (BlockingQueue<Trade> tradeQueue : tradesQueues) {
+                                tradeQueue.put(trade);
                             }
                         } catch (InterruptedException e) {
                             e.printStackTrace();
@@ -71,14 +71,12 @@ public class SocketClient {
     private Trade unpack(String message) {
         String[] split = message.split("~");
 
-        Trade marketData = new Trade(
+        return new Trade(
                 split[2],
                 split[3],
                 Double.parseDouble(split[5]),
                 Long.parseLong(split[6]),
                 Double.parseDouble(split[8])
         );
-
-        return marketData;
     }
 }

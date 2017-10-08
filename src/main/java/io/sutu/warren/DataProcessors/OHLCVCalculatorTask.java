@@ -17,13 +17,13 @@ import java.util.concurrent.BlockingQueue;
  */
 public class OHLCVCalculatorTask implements Runnable {
 
-    private final BlockingQueue<Trade> rawDataQueue;
-    private final BlockingQueue<Tick> aggregatedDataQueue;
+    private final BlockingQueue<Trade> tradesQueue;
+    private final BlockingQueue<Tick> OHLCVQueue;
     private int interval;
 
-    OHLCVCalculatorTask(BlockingQueue<Trade> rawDataQueue, BlockingQueue<Tick> aggregatedDataQueue, int interval) {
-        this.rawDataQueue = rawDataQueue;
-        this.aggregatedDataQueue = aggregatedDataQueue;
+    OHLCVCalculatorTask(BlockingQueue<Trade> tradesQueue, BlockingQueue<Tick> OHLCVQueue, int interval) {
+        this.tradesQueue = tradesQueue;
+        this.OHLCVQueue = OHLCVQueue;
         this.interval = interval;
     }
 
@@ -36,7 +36,7 @@ public class OHLCVCalculatorTask implements Runnable {
 
         while (!Thread.interrupted()) {
             try {
-                Trade trade = rawDataQueue.take();
+                Trade trade = tradesQueue.take();
 
                 long tradeTimeStamp = trade.getTimeStamp();
                 long targetTickEndTimeStamp = tradeTimeStamp - (tradeTimeStamp % interval) + interval;
@@ -49,7 +49,7 @@ public class OHLCVCalculatorTask implements Runnable {
                 if (currentTickEndTimeStamp != targetTickEndTimeStamp) {
                     // pass the current tick to the next element in the pipeline, by putting it in the next queue
                     if (null != tick) {
-                        aggregatedDataQueue.put(tick);
+                        OHLCVQueue.put(tick);
                     }
 
                     ZonedDateTime tickEndTime = ZonedDateTime.ofInstant(Instant.ofEpochSecond(targetTickEndTimeStamp), ZoneId.of("UTC"));

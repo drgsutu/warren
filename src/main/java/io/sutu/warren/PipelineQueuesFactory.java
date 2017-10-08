@@ -11,26 +11,26 @@ import java.util.concurrent.LinkedBlockingQueue;
 @Component
 public class PipelineQueuesFactory {
 
-    private BlockingQueue<Trade> rawDataToBeAggregatedQueue =  new LinkedBlockingQueue<>();
-    private BlockingQueue<Trade> rawDataToBeStoredQueue =  new LinkedBlockingQueue<>();
-    private List<BlockingQueue<Trade>> rawDataQueues = Arrays.asList(rawDataToBeAggregatedQueue, rawDataToBeStoredQueue);
-    private BlockingQueue<Tick> aggregatedDataQueue =  new LinkedBlockingQueue<>();
+    private BlockingQueue<Trade> tradesToBeAggregatedQueue =  new LinkedBlockingQueue<>();
+    private BlockingQueue<Trade> tradesToBeStoredQueue =  new LinkedBlockingQueue<>();
+    private List<BlockingQueue<Trade>> tradesQueues = Arrays.asList(tradesToBeAggregatedQueue, tradesToBeStoredQueue);
+    private BlockingQueue<Tick> OHLCVQueue =  new LinkedBlockingQueue<>();
     private BlockingQueue<IndicatorValue> indicatorsValuesQueue = new LinkedBlockingQueue<>();
 
-    public BlockingQueue<Trade> getRawDataToBeAggregatedQueue() {
-        return rawDataToBeAggregatedQueue;
+    public BlockingQueue<Trade> getTradesToBeAggregatedQueue() {
+        return tradesToBeAggregatedQueue;
     }
 
-    public BlockingQueue<Trade> getRawDataToBeStoredQueue() {
-        return rawDataToBeStoredQueue;
+    public BlockingQueue<Trade> getTradesToBeStoredQueue() {
+        return tradesToBeStoredQueue;
     }
 
-    public List<BlockingQueue<Trade>> getRawDataQueues() {
-        return rawDataQueues;
+    public List<BlockingQueue<Trade>> getTradesQueues() {
+        return tradesQueues;
     }
 
-    public BlockingQueue<Tick> getAggregatedDataQueue() {
-        return aggregatedDataQueue;
+    public BlockingQueue<Tick> getOHLCVQueue() {
+        return OHLCVQueue;
     }
 
     public BlockingQueue<IndicatorValue> getIndicatorsValuesQueue() {
