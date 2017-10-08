@@ -12,10 +12,10 @@ import java.util.concurrent.BlockingQueue;
 
 public class CsvFileWriterTask implements Runnable {
 
-    private final BlockingQueue<Trade> tradesToBeStoredQueue;
+    private final BlockingQueue<Trade> tradesQueue;
 
-    CsvFileWriterTask(BlockingQueue<Trade> tradesToBeStoredQueue) {
-        this.tradesToBeStoredQueue = tradesToBeStoredQueue;
+    CsvFileWriterTask(BlockingQueue<Trade> tradesQueue) {
+        this.tradesQueue = tradesQueue;
     }
 
     @Override
@@ -27,7 +27,7 @@ public class CsvFileWriterTask implements Runnable {
         ) {
             try {
                 while (!Thread.interrupted()) {
-                    Trade trade = tradesToBeStoredQueue.take();
+                    Trade trade = tradesQueue.take();
                     String csvLine = String.join(
                             ",",
                             trade.getMarket(),
