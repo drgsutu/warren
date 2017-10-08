@@ -17,9 +17,10 @@ import java.util.concurrent.Executors;
 @Component
 class Application {
 
-    static final String[] MARKETS = {
+    private static final String[] MARKETS = {
             "NEO-BTC"
     };
+    private static final int CANDLE_STICK_INTERVAL_SECONDS = 60;
 
     private SocketClient socketClient;
     private TradesAggregatorTaskFactory tradesAggregatorTaskFactory;
@@ -48,7 +49,7 @@ class Application {
         ExecutorService executorService = Executors.newFixedThreadPool(4);
 
         // aggregate the data into OHLCV ticks
-        TradesAggregatorTask tradesAggregatorTask = tradesAggregatorTaskFactory.newTask();
+        TradesAggregatorTask tradesAggregatorTask = tradesAggregatorTaskFactory.newTaskForInterval(CANDLE_STICK_INTERVAL_SECONDS);
         executorService.submit(tradesAggregatorTask);
 
         // save data to file

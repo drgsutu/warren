@@ -18,7 +18,7 @@ public class TradesAggregatorTaskFactory {
         this.aggregatedDataQueue = pipelineQueuesFactory.getAggregatedDataQueue();
     }
 
-    public TradesAggregatorTask newTask() {
-        return new TradesAggregatorTask(rawDataQueue, aggregatedDataQueue);
+    public TradesAggregatorTask newTaskForInterval(int interval) {
+        return new TradesAggregatorTask(rawDataQueue, aggregatedDataQueue, interval);
     }
 }

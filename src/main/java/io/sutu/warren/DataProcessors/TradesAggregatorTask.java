@@ -14,16 +14,17 @@ public class TradesAggregatorTask implements Runnable {
 
     private final BlockingQueue<Trade> rawDataQueue;
     private final BlockingQueue<Tick> aggregatedDataQueue;
+    private int interval;
 
-    TradesAggregatorTask(BlockingQueue<Trade> rawDataQueue, BlockingQueue<Tick> aggregatedDataQueue) {
+    TradesAggregatorTask(BlockingQueue<Trade> rawDataQueue, BlockingQueue<Tick> aggregatedDataQueue, int interval) {
         this.rawDataQueue = rawDataQueue;
         this.aggregatedDataQueue = aggregatedDataQueue;
+        this.interval = interval;
     }
 
     @Override
     public void run() {
         // TODO: first tick is incomplete so it should not be put in the queue
-        int interval = 60;
         Duration tickTimePeriod = Duration.ofSeconds(interval);
         long currentTickEndTimeStamp = 0;
         Tick tick = null;
