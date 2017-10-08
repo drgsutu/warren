@@ -10,6 +10,11 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.concurrent.BlockingQueue;
 
+/**
+ * This class calculates OHLCVs for the given interval, from trades data.
+ * It uses the eu.verdelhan.ta4j.Tick class as OHLCV period.
+ * A tick is not actually an OHLCV in trading terminology, but it is used here with the same meaning.
+ */
 public class OHLCVCalculatorTask implements Runnable {
 
     private final BlockingQueue<Trade> rawDataQueue;
