@@ -1,7 +1,7 @@
 package io.sutu.warren;
 
-import io.sutu.warren.DataProcessors.TradesAggregatorTask;
-import io.sutu.warren.DataProcessors.TradesAggregatorTaskFactory;
+import io.sutu.warren.DataProcessors.OHLCVCalculatorTask;
+import io.sutu.warren.DataProcessors.OHLCVCalculatorTaskFactory;
 import io.sutu.warren.DataProcessors.IndicatorCalculatorTask;
 import io.sutu.warren.DataProcessors.IndicatorCalculatorTaskFactory;
 import io.sutu.warren.Communication.CryptoCompare.SocketClient;
@@ -20,47 +20,47 @@ class Application {
     private static final String[] MARKETS = {
             "NEO-BTC"
     };
-    private static final int CANDLE_STICK_INTERVAL_SECONDS = 60;
+    private static final int OHLCV_INTERVAL_SECONDS = 60;
 
     private SocketClient socketClient;
-    private TradesAggregatorTaskFactory tradesAggregatorTaskFactory;
+    private OHLCVCalculatorTaskFactory OHLCVCalculatorTaskFactory;
     private CsvFileWriterTaskFactory csvFileWriterTaskFactory;
     private IndicatorCalculatorTaskFactory indicatorCalculatorTaskFactory;
     private TradingTaskFactory tradingTaskFactory;
 
     public Application(
             SocketClient socketClient,
-            TradesAggregatorTaskFactory tradesAggregatorTaskFactory,
+            OHLCVCalculatorTaskFactory OHLCVCalculatorTaskFactory,
             CsvFileWriterTaskFactory csvFileWriterTaskFactory,
             IndicatorCalculatorTaskFactory indicatorCalculatorTaskFactory,
             TradingTaskFactory tradingTaskFactory
     ) {
         this.socketClient = socketClient;
-        this.tradesAggregatorTaskFactory = tradesAggregatorTaskFactory;
+        this.OHLCVCalculatorTaskFactory = OHLCVCalculatorTaskFactory;
         this.csvFileWriterTaskFactory = csvFileWriterTaskFactory;
         this.indicatorCalculatorTaskFactory = indicatorCalculatorTaskFactory;
         this.tradingTaskFactory = tradingTaskFactory;
     }
 
     void run() {
-        // get the data
+        // get trades data
         socketClient.subscribe(MARKETS);
 
         ExecutorService executorService = Executors.newFixedThreadPool(4);
 
-        // aggregate the data into OHLCV ticks
-        TradesAggregatorTask tradesAggregatorTask = tradesAggregatorTaskFactory.newTaskForInterval(CANDLE_STICK_INTERVAL_SECONDS);
-        executorService.submit(tradesAggregatorTask);
+        // trades -> OHLCV // aggregate trades data into OHLCV periods
+        OHLCVCalculatorTask OHLCVCalculatorTask = OHLCVCalculatorTaskFactory.newTaskForInterval(OHLCV_INTERVAL_SECONDS);
+        executorService.submit(OHLCVCalculatorTask);
 
-        // save data to file
+        // trades -> file // save trades to file
         CsvFileWriterTask csvFileWriterTask = csvFileWriterTaskFactory.newTask();
         executorService.submit(csvFileWriterTask);
 
-        // calculate indicators
+        // OHLCV -> indicators // calculate indicators from OHLCV periods
         IndicatorCalculatorTask indicatorCalculatorTask = indicatorCalculatorTaskFactory.newTask();
         executorService.submit(indicatorCalculatorTask);
 
-        // take trading decisions
+        // indicators -> trades // take trading decisions based on indicators
         TradingTask tradingTask = tradingTaskFactory.newTask();
         executorService.submit(tradingTask);
 

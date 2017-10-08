@@ -10,13 +10,13 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.concurrent.BlockingQueue;
 
-public class TradesAggregatorTask implements Runnable {
+public class OHLCVCalculatorTask implements Runnable {
 
     private final BlockingQueue<Trade> rawDataQueue;
     private final BlockingQueue<Tick> aggregatedDataQueue;
     private int interval;
 
-    TradesAggregatorTask(BlockingQueue<Trade> rawDataQueue, BlockingQueue<Tick> aggregatedDataQueue, int interval) {
+    OHLCVCalculatorTask(BlockingQueue<Trade> rawDataQueue, BlockingQueue<Tick> aggregatedDataQueue, int interval) {
         this.rawDataQueue = rawDataQueue;
         this.aggregatedDataQueue = aggregatedDataQueue;
         this.interval = interval;
