@@ -36,7 +36,7 @@ public class IndicatorValue {
     @Override
     public String toString() {
         return String.format(
-                "[%s][%s] %s - %$f", endTime.format(DateTimeFormatter.ISO_DATE_TIME), market, indicatorName, value
+                "[%s][%s] %s - %f", endTime.format(DateTimeFormatter.ISO_DATE_TIME), market, indicatorName, value
         );
     }
 }
