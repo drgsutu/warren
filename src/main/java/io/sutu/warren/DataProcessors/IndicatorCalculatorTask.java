@@ -3,8 +3,7 @@ package io.sutu.warren.DataProcessors;
 import eu.verdelhan.ta4j.BaseTimeSeries;
 import eu.verdelhan.ta4j.Tick;
 import eu.verdelhan.ta4j.TimeSeries;
-import eu.verdelhan.ta4j.indicators.SMAIndicator;
-import eu.verdelhan.ta4j.indicators.helpers.ClosePriceIndicator;
+import io.sutu.warren.DataProcessors.Indicators.Indicator;
 import io.sutu.warren.IndicatorValue;
 
 import java.util.ArrayList;
@@ -13,51 +12,57 @@ import java.util.concurrent.BlockingQueue;
 
 public class IndicatorCalculatorTask implements Runnable {
 
+    private static final int MINIMUM_TIME_FRAME = 30;
+
+    private IndicatorFactory indicatorFactory;
     private BlockingQueue<Tick> OHLCVQueue;
     private BlockingQueue<IndicatorValue> indicatorsValuesQueue;
 
+    // TODO: move this as param
+    private String market = "NEO-BTC";
+
     IndicatorCalculatorTask(
+            IndicatorFactory indicatorFactory,
             BlockingQueue<Tick> OHLCVQueue,
             BlockingQueue<IndicatorValue> indicatorsValuesQueue
     ) {
+        this.indicatorFactory = indicatorFactory;
         this.OHLCVQueue = OHLCVQueue;
         this.indicatorsValuesQueue = indicatorsValuesQueue;
     }
 
     @Override
     public void run() {
-        // TODO: move this to a config
-        int indicatorTimeFrame = 5;
-        // TODO: move this as param
-        String market = "NEO-BTC";
-
         List<Tick> ticks = new ArrayList<>();
         TimeSeries timeSeries = new BaseTimeSeries(market, ticks);
-        ClosePriceIndicator closePriceIndicator = new ClosePriceIndicator(timeSeries);
-        SMAIndicator sma = new SMAIndicator(closePriceIndicator, indicatorTimeFrame);
+        List<Indicator> indicators = indicatorFactory.getIndicators(timeSeries);
 
         while (!Thread.interrupted()) {
             try {
                 Tick tick = OHLCVQueue.take();
-                System.out.println(tick);
                 ticks.add(tick);
+
+                // do not calculate until we have the minimum historical data to calculate indicators
+                if (ticks.size() < MINIMUM_TIME_FRAME) {
+                    continue;
+                }
+
+                for (Indicator indicator : indicators) {
+                    double value = indicator.getValue(ticks.size() - 1);
+                    IndicatorValue indicatorValue = new IndicatorValue(indicator.getName(), value, tick.getEndTime());
+
+                    try {
+                        indicatorsValuesQueue.put(indicatorValue);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                System.out.println(tick);
             } catch (InterruptedException e) {
                 System.out.println("Interrupted: " + getClass().getName());
             }
 
-            // do not calculate until we have the minimum historical data for the indicator calculation
-            if (ticks.size() < indicatorTimeFrame) {
-                continue;
-            }
-
-            double value = sma.getValue(ticks.size() - 1).toDouble();
-            Tick lastTick = ticks.get(ticks.size() - 1);
-            IndicatorValue indicatorValue = new IndicatorValue("SMA", market, value, lastTick.getEndTime());
-            try {
-                indicatorsValuesQueue.put(indicatorValue);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
         }
     }
 }
