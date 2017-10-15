@@ -23,7 +23,7 @@ public class IndicatorCalculatorTaskFactory {
         this.indicatorsValuesQueue = pipelineQueuesFactory.getIndicatorsValuesQueue();
     }
 
-    public IndicatorCalculatorTask newTask() {
-        return new IndicatorCalculatorTask(indicatorFactory, OHLCVQueue, indicatorsValuesQueue);
+    public IndicatorCalculatorTask newTaskForMarket(String market) {
+        return new IndicatorCalculatorTask(market, indicatorFactory, OHLCVQueue, indicatorsValuesQueue);
     }
 }

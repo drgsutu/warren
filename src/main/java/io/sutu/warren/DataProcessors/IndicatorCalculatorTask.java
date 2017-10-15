@@ -14,18 +14,18 @@ public class IndicatorCalculatorTask implements Runnable {
 
     private static final int MINIMUM_TIME_FRAME = 30;
 
+    private String market;
     private IndicatorFactory indicatorFactory;
     private BlockingQueue<Tick> OHLCVQueue;
     private BlockingQueue<IndicatorValue> indicatorsValuesQueue;
 
-    // TODO: move this as param
-    private String market = "NEO-BTC";
-
     IndicatorCalculatorTask(
+            String market,
             IndicatorFactory indicatorFactory,
             BlockingQueue<Tick> OHLCVQueue,
             BlockingQueue<IndicatorValue> indicatorsValuesQueue
     ) {
+        this.market = market;
         this.indicatorFactory = indicatorFactory;
         this.OHLCVQueue = OHLCVQueue;
         this.indicatorsValuesQueue = indicatorsValuesQueue;

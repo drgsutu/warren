@@ -75,7 +75,7 @@ class Application {
         }
 
         // OHLCV -> indicators // calculate indicators from OHLCV periods
-        IndicatorCalculatorTask indicatorCalculatorTask = indicatorCalculatorTaskFactory.newTask();
+        IndicatorCalculatorTask indicatorCalculatorTask = indicatorCalculatorTaskFactory.newTaskForMarket(MARKETS[0]);
         executorService.submit(indicatorCalculatorTask);
 
         // indicators -> trades // take trading decisions based on indicators
