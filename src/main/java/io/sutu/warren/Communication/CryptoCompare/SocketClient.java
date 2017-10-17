@@ -23,6 +23,8 @@ public class SocketClient {
         marketsToSubscriptions = new HashMap<>();
         marketsToSubscriptions.put("ETH-BTC", "2~BitTrex~ETH~BTC");
         marketsToSubscriptions.put("NEO-BTC", "2~BitTrex~NEO~BTC");
+        marketsToSubscriptions.put("XLM-BTC", "2~BitTrex~XLM~BTC");
+        marketsToSubscriptions.put("XRP-BTC", "2~BitTrex~XRP~BTC");
     }
 
     private PipelineQueuesFactory pipelineQueuesFactory;
