@@ -10,8 +10,6 @@ import io.sutu.warren.Storage.CsvFileReaderTask;
 import io.sutu.warren.Storage.CsvFileReaderTaskFactory;
 import io.sutu.warren.Storage.CsvFileWriterTask;
 import io.sutu.warren.Storage.CsvFileWriterTaskFactory;
-import io.sutu.warren.Trading.TradingTask;
-import io.sutu.warren.Trading.TradingTaskFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.concurrent.ExecutorService;
@@ -21,7 +19,9 @@ import java.util.concurrent.Executors;
 class Application {
 
     private static final String[] MARKETS = {
-            "NEO-BTC"
+//            "NEO-BTC"
+            "XLM-BTC"
+//            "XRP-BTC"
     };
     private static final int OHLCV_INTERVAL_SECONDS = 60;
 
@@ -31,7 +31,6 @@ class Application {
     private OHLCVCalculatorTaskFactory OHLCVCalculatorTaskFactory;
     private CsvFileWriterTaskFactory csvFileWriterTaskFactory;
     private IndicatorCalculatorTaskFactory indicatorCalculatorTaskFactory;
-    private TradingTaskFactory tradingTaskFactory;
 
     public Application(
             Config config,
@@ -39,8 +38,7 @@ class Application {
             CsvFileReaderTaskFactory csvFileReaderTaskFactory,
             OHLCVCalculatorTaskFactory OHLCVCalculatorTaskFactory,
             CsvFileWriterTaskFactory csvFileWriterTaskFactory,
-            IndicatorCalculatorTaskFactory indicatorCalculatorTaskFactory,
-            TradingTaskFactory tradingTaskFactory
+            IndicatorCalculatorTaskFactory indicatorCalculatorTaskFactory
     ) {
         this.config = config;
         this.socketClient = socketClient;
@@ -48,7 +46,6 @@ class Application {
         this.OHLCVCalculatorTaskFactory = OHLCVCalculatorTaskFactory;
         this.csvFileWriterTaskFactory = csvFileWriterTaskFactory;
         this.indicatorCalculatorTaskFactory = indicatorCalculatorTaskFactory;
-        this.tradingTaskFactory = tradingTaskFactory;
     }
 
     void run() {
@@ -77,10 +74,6 @@ class Application {
         // OHLCV -> indicators // calculate indicators from OHLCV periods
         IndicatorCalculatorTask indicatorCalculatorTask = indicatorCalculatorTaskFactory.newTaskForMarket(MARKETS[0]);
         executorService.submit(indicatorCalculatorTask);
-
-        // indicators -> trades // take trading decisions based on indicators
-        TradingTask tradingTask = tradingTaskFactory.newTask();
-        executorService.submit(tradingTask);
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             executorService.shutdownNow();
