@@ -25,6 +25,7 @@ public class SocketClient {
         marketsToSubscriptions.put("NEO-BTC", "2~BitTrex~NEO~BTC");
         marketsToSubscriptions.put("XLM-BTC", "2~BitTrex~XLM~BTC");
         marketsToSubscriptions.put("XRP-BTC", "2~BitTrex~XRP~BTC");
+        marketsToSubscriptions.put("BTC-USD", "2~Bitfinex~BTC~USD");
     }
 
     private PipelineQueuesFactory pipelineQueuesFactory;
@@ -54,15 +55,18 @@ public class SocketClient {
             socket.emit("SubAdd", emitParam);
         }).on("m", args -> {
             Stream.of(args)
+//                    .peek(System.out::println)
                     .filter(line -> line.toString().charAt(0) != '3')
                     .forEach(line -> {
-                        Trade trade = unpack((String) line);
                         try {
+                            Trade trade = unpack((String) line);
                             for (BlockingQueue<Trade> tradeQueue : tradesQueues) {
                                 tradeQueue.put(trade);
                             }
                         } catch (InterruptedException e) {
                             e.printStackTrace();
+                        } catch (NumberFormatException e) {
+                            System.out.println("[ERROR] parsing: " + line);
                         }
                     });
         }).on(Socket.EVENT_DISCONNECT, args -> System.out.println(String.format("[%s] Disconnected", new Date())));
@@ -70,15 +74,15 @@ public class SocketClient {
         socket.connect();
     }
 
-    private Trade unpack(String message) {
+    private Trade unpack(String message) throws NumberFormatException {
         String[] split = message.split("~");
 
-        return new Trade(
-                split[2],
-                split[3],
-                Double.parseDouble(split[5]),
-                Long.parseLong(split[6]),
-                Double.parseDouble(split[8])
-        );
+        final String fromCurrency = split[2];
+        final String toCurrency = split[3];
+        final double price = Double.parseDouble(split[5]);
+        final long timeStamp = Long.parseLong(split[6]);
+        final double volume = Double.parseDouble(split[7]);
+
+        return new Trade(fromCurrency, toCurrency, price, timeStamp, volume);
     }
 }

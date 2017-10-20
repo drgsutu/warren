@@ -19,8 +19,9 @@ import java.util.concurrent.Executors;
 class Application {
 
     private static final String[] MARKETS = {
+            "BTC-USD"
 //            "NEO-BTC"
-            "XLM-BTC"
+//            "XLM-BTC"
 //            "XRP-BTC"
     };
     private static final int OHLCV_INTERVAL_SECONDS = 60;
