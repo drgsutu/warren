@@ -9,13 +9,13 @@ import java.util.concurrent.BlockingQueue;
 @Component
 public class IndicatorCalculatorTaskFactory {
 
-    private final BlockingQueue<Tick> OHLCVQueue;
+    private PipelineQueuesFactory pipelineQueuesFactory;
 
     public IndicatorCalculatorTaskFactory(PipelineQueuesFactory pipelineQueuesFactory) {
-        this.OHLCVQueue = pipelineQueuesFactory.getOHLCVQueue();
+        this.pipelineQueuesFactory = pipelineQueuesFactory;
     }
 
     public IndicatorCalculatorTask newTaskForMarket(String market) {
-        return new IndicatorCalculatorTask(market, OHLCVQueue);
+        return new IndicatorCalculatorTask(market, pipelineQueuesFactory.getOHLCVQueue());
     }
 }

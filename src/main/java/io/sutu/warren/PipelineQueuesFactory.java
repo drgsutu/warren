@@ -1,11 +1,9 @@
 package io.sutu.warren;
 
 import com.typesafe.config.Config;
-import eu.verdelhan.ta4j.Tick;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -15,8 +13,7 @@ public class PipelineQueuesFactory {
 
     private BlockingQueue<Trade> tradesToBeAggregatedQueue =  new LinkedBlockingQueue<>();
     private BlockingQueue<Trade> tradesToBeStoredQueue =  new LinkedBlockingQueue<>();
-    private BlockingQueue<Tick> OHLCVQueue =  new LinkedBlockingQueue<>();
-    private BlockingQueue<IndicatorValue> indicatorsValuesQueue = new LinkedBlockingQueue<>();
+    private BlockingQueue<List<String>> OHLCVQueue =  new LinkedBlockingQueue<>();
     private List<BlockingQueue<Trade>> tradesQueues = new ArrayList<>();
 
     public PipelineQueuesFactory(Config config) {
@@ -38,11 +35,7 @@ public class PipelineQueuesFactory {
         return tradesQueues;
     }
 
-    public BlockingQueue<Tick> getOHLCVQueue() {
+    public BlockingQueue<List<String>> getOHLCVQueue() {
         return OHLCVQueue;
-    }
-
-    public BlockingQueue<IndicatorValue> getIndicatorsValuesQueue() {
-        return indicatorsValuesQueue;
     }
 }
