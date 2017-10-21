@@ -38,9 +38,7 @@ public class DataProviderTask implements Runnable {
 
             Optional<List<String>> ohlcv = httpResponseResult.getPair()
                     .stream()
-                    .peek(System.out::println)
                     .filter(arg -> Long.parseLong(arg.get(0)) < 8_000_000_000L) // removes invalid API responses
-                    .peek(System.out::println)
                     .filter(arg -> arg.get(0).equals(httpResponseResult.getLast()))
                     .findFirst();
 

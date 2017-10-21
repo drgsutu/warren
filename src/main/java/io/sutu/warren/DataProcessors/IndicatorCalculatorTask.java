@@ -48,15 +48,11 @@ public class IndicatorCalculatorTask implements Runnable {
             try {
                 List<String> ohlcv = OHLCVQueue.take();
 
-                System.out.println("AT GATE " + ohlcv);
-
                 long timeStamp = Long.parseLong(ohlcv.get(0));
                 if (timeStamp == lastProcessedOHLCVTimeStamp) {
                     continue;
                 }
                 lastProcessedOHLCVTimeStamp = timeStamp;
-
-                System.out.println("PASSED  " + ohlcv);
 
                 ZonedDateTime endTime = ZonedDateTime.ofInstant(Instant.ofEpochSecond(timeStamp), ZoneId.of("UTC"));
                 Tick tick = new BaseTick(endTime, ohlcv.get(1), ohlcv.get(2), ohlcv.get(3), ohlcv.get(4), ohlcv.get(5));
