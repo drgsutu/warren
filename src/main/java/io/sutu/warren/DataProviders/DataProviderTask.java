@@ -1,7 +1,10 @@
 package io.sutu.warren.DataProviders;
 
 import io.sutu.warren.Communication.Kraken.HttpClient;
+import io.sutu.warren.Communication.Kraken.HttpClientException;
 import io.sutu.warren.Communication.Kraken.HttpResponseResult;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.Instant;
 import java.util.List;
@@ -9,6 +12,8 @@ import java.util.Optional;
 import java.util.concurrent.BlockingQueue;
 
 public class DataProviderTask implements Runnable {
+
+    final static Logger logger = LoggerFactory.getLogger(DataProviderTask.class);
 
     private String market;
     private int intervalSeconds;
@@ -34,11 +39,19 @@ public class DataProviderTask implements Runnable {
             final Long since = now - (intervalSeconds * 2) - 1;
             final int intervalMinutes = intervalSeconds / 60;
 
-            HttpResponseResult httpResponseResult = httpClient.getOHCLVData(market, intervalMinutes, since);
+            HttpResponseResult httpResponseResult;
+            try {
+                httpResponseResult = httpClient.getOHCLVData(market, intervalMinutes, since);
+            } catch (HttpClientException e) {
+                logger.error(e.getMessage(), e);
+                continue;
+            }
 
             Optional<List<String>> ohlcv = httpResponseResult.getPair()
                     .stream()
-                    .filter(arg -> Long.parseLong(arg.get(0)) < 8_000_000_000L) // removes invalid API responses
+                    // remove invalid API responses
+                    .filter(arg -> Long.parseLong(arg.get(0)) < 8_000_000_000L)
+                    // get the last complete OHLCV using the timestamp provided by the API
                     .filter(arg -> arg.get(0).equals(httpResponseResult.getLast()))
                     .findFirst();
 
@@ -52,7 +65,7 @@ public class DataProviderTask implements Runnable {
                 }
                 Thread.sleep(10000);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                logger.warn("Thread interrupted");
             }
         }
     }

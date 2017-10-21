@@ -1,8 +1,6 @@
 package io.sutu.warren.Communication.Kraken;
 
 import com.google.gson.Gson;
-import com.google.gson.annotations.SerializedName;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.fluent.Request;
 import org.apache.http.client.utils.URIBuilder;
 import org.springframework.stereotype.Component;
@@ -11,6 +9,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class HttpClient {
@@ -21,7 +20,7 @@ public class HttpClient {
         this.gson = gson;
     }
 
-    public HttpResponseResult getOHCLVData(String pair, int interval, Long since) {
+    public HttpResponseResult getOHCLVData(String pair, int interval, Long since) throws HttpClientException {
         try {
             URI uri = new URIBuilder()
                     .setScheme("https")
@@ -36,20 +35,17 @@ public class HttpClient {
             HttpResponse httpResponse = gson.fromJson(rawResponse, HttpResponse.class);
 
             if (httpResponse.error.size() > 0) {
-                System.out.println(httpResponse.error);
+                throw new HttpClientException("API responded with error(s): \n" +
+                        httpResponse.error.stream().collect(Collectors.joining("\n")));
             }
 
             return httpResponse.result;
 
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        } catch (ClientProtocolException e) {
-            e.printStackTrace();
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new HttpClientException("Error occurred during HTTP communication", e);
+        } catch (URISyntaxException e) {
+            throw new HttpClientException("Error in URI syntax", e);
         }
-
-        return null;
     }
 
 
