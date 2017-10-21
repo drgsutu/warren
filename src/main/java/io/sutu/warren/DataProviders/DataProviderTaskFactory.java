@@ -16,6 +16,6 @@ public class DataProviderTaskFactory {
     }
 
     public DataProviderTask newTaskForMarketAndInterval(String market, int intervalSeconds) {
-        return new DataProviderTask(market, intervalSeconds, httpClient, pipelineQueuesFactory.getOHLCVQueue());
+        return new DataProviderTask(market, intervalSeconds, httpClient, pipelineQueuesFactory.getOHLCVQueues());
     }
 }

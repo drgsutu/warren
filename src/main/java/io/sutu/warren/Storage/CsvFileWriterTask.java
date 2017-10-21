@@ -1,40 +1,35 @@
 package io.sutu.warren.Storage;
 
-import io.sutu.warren.Trade;
-
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.List;
 import java.util.concurrent.BlockingQueue;
+import java.util.stream.Collectors;
 
 public class CsvFileWriterTask implements Runnable {
 
-    private final BlockingQueue<Trade> tradesQueue;
+    private final BlockingQueue<List<String>> OHLCVQueue;
 
-    CsvFileWriterTask(BlockingQueue<Trade> tradesQueue) {
-        this.tradesQueue = tradesQueue;
+    CsvFileWriterTask(BlockingQueue<List<String>> OHLCVQueue) {
+        this.OHLCVQueue = OHLCVQueue;
     }
 
     @Override
     public void run() {
-        String path = "trades.csv";
+        String path = "ohlcv.csv";
+
         try (
                 BufferedWriter bufferedWriter = Files.newBufferedWriter(Paths.get(path), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
                 PrintWriter writer = new PrintWriter(bufferedWriter)
         ) {
             try {
                 while (!Thread.interrupted()) {
-                    Trade trade = tradesQueue.take();
-                    String csvLine = String.join(
-                            ",",
-                            trade.getMarket(),
-                            Double.toString(trade.getPrice()),
-                            Long.toString(trade.getTimeStamp()),
-                            Double.toString(trade.getVolume())
-                    );
+                    List<String> ohlcv = OHLCVQueue.take();
+                    String csvLine = ohlcv.stream().collect(Collectors.joining(","));
                     writer.println(csvLine);
                 }
             } catch (InterruptedException e) {

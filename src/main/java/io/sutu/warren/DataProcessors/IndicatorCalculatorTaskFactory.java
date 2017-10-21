@@ -1,10 +1,7 @@
 package io.sutu.warren.DataProcessors;
 
-import eu.verdelhan.ta4j.Tick;
 import io.sutu.warren.PipelineQueuesFactory;
 import org.springframework.stereotype.Component;
-
-import java.util.concurrent.BlockingQueue;
 
 @Component
 public class IndicatorCalculatorTaskFactory {
@@ -16,6 +13,6 @@ public class IndicatorCalculatorTaskFactory {
     }
 
     public IndicatorCalculatorTask newTaskForMarket(String market) {
-        return new IndicatorCalculatorTask(market, pipelineQueuesFactory.getOHLCVQueue());
+        return new IndicatorCalculatorTask(market, pipelineQueuesFactory.getOHLCVToBeProccessedQueue());
     }
 }

@@ -13,13 +13,18 @@ public class DataProviderTask implements Runnable {
     private String market;
     private int intervalSeconds;
     private HttpClient httpClient;
-    private BlockingQueue<List<String>> OHLCVQueue;
+    private List<BlockingQueue<List<String>>> OHLCVQueues;
 
-    DataProviderTask(String market, int intervalSeconds,HttpClient httpClient, BlockingQueue<List<String>> OHLCVQueue) {
+    DataProviderTask(
+            String market,
+            int intervalSeconds,
+            HttpClient httpClient,
+            List<BlockingQueue<List<String>>> OHLCVQueues
+    ) {
         this.market = market;
         this.intervalSeconds = intervalSeconds;
         this.httpClient = httpClient;
-        this.OHLCVQueue = OHLCVQueue;
+        this.OHLCVQueues = OHLCVQueues;
     }
 
     @Override
@@ -34,18 +39,19 @@ public class DataProviderTask implements Runnable {
             Optional<List<String>> ohlcv = httpResponseResult.getPair()
                     .stream()
                     .peek(System.out::println)
-                    .filter(arg -> arg.get(0).equals(httpResponseResult.getLast()) && Long.parseLong(arg.get(0)) < 8_000_000_000L)
+                    .filter(arg -> Long.parseLong(arg.get(0)) < 8_000_000_000L) // removes invalid API responses
+                    .peek(System.out::println)
+                    .filter(arg -> arg.get(0).equals(httpResponseResult.getLast()))
                     .findFirst();
 
-            try {
-                OHLCVQueue.put(ohlcv.orElseThrow(Exception::new));
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (Throwable throwable) {
-                throwable.printStackTrace();
+            if (!ohlcv.isPresent()) {
+                continue;
             }
 
             try {
+                for (BlockingQueue<List<String>> queue : OHLCVQueues) {
+                    queue.put(ohlcv.get());
+                }
                 Thread.sleep(10000);
             } catch (InterruptedException e) {
                 e.printStackTrace();

@@ -56,7 +56,7 @@ class Application {
                     dataProviderTaskFactory.newTaskForMarketAndInterval(MARKETS[0], OHLCV_INTERVAL_SECONDS);
             executorService.submit(dataProviderTask);
         } else {
-            // file data -> trades
+            // file data -> OHLCV
             CsvFileReaderTask csvFileReaderTask = csvFileReaderTaskFactory.newTask();
             executorService.submit(csvFileReaderTask);
         }

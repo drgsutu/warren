@@ -11,31 +11,26 @@ import java.util.concurrent.LinkedBlockingQueue;
 @Component
 public class PipelineQueuesFactory {
 
-    private BlockingQueue<Trade> tradesToBeAggregatedQueue =  new LinkedBlockingQueue<>();
-    private BlockingQueue<Trade> tradesToBeStoredQueue =  new LinkedBlockingQueue<>();
-    private BlockingQueue<List<String>> OHLCVQueue =  new LinkedBlockingQueue<>();
-    private List<BlockingQueue<Trade>> tradesQueues = new ArrayList<>();
+    private BlockingQueue<List<String>> OHLCVToBeProccessedQueue =  new LinkedBlockingQueue<>();
+    private BlockingQueue<List<String>> OHLCVToBeStoredQueue =  new LinkedBlockingQueue<>();
+    private List<BlockingQueue<List<String>>> OHLCVQueues = new ArrayList<>();
 
     public PipelineQueuesFactory(Config config) {
-        tradesQueues.add(tradesToBeAggregatedQueue);
+        OHLCVQueues.add(OHLCVToBeProccessedQueue);
         if (config.getBoolean("writeTradesToFile")) {
-            tradesQueues.add(tradesToBeStoredQueue);
+            OHLCVQueues.add(OHLCVToBeStoredQueue);
         }
     }
 
-    public BlockingQueue<Trade> getTradesToBeAggregatedQueue() {
-        return tradesToBeAggregatedQueue;
+    public BlockingQueue<List<String>> getOHLCVToBeProccessedQueue() {
+        return OHLCVToBeProccessedQueue;
     }
 
-    public BlockingQueue<Trade> getTradesToBeStoredQueue() {
-        return tradesToBeStoredQueue;
+    public BlockingQueue<List<String>> getOHLCVToBeStoredQueue() {
+        return OHLCVToBeStoredQueue;
     }
 
-    public List<BlockingQueue<Trade>> getTradesQueues() {
-        return tradesQueues;
-    }
-
-    public BlockingQueue<List<String>> getOHLCVQueue() {
-        return OHLCVQueue;
+    public List<BlockingQueue<List<String>>> getOHLCVQueues() {
+        return OHLCVQueues;
     }
 }
