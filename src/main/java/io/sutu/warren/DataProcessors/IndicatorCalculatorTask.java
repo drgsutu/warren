@@ -39,8 +39,8 @@ public class IndicatorCalculatorTask implements Runnable {
         final ClosePriceIndicator closePriceIndicator = new ClosePriceIndicator(timeSeries);
         Indicator<Decimal> macd = new MACDIndicator(closePriceIndicator, 12, 26);
         Indicator<Decimal> macdEma = new EMAIndicator(macd, 9);
-        Rule entryRule = new CrossedUpIndicatorRule(macdEma, macd);
-        Rule exitRule = new CrossedDownIndicatorRule(macdEma, macd);
+        Rule entryRule = new CrossedUpIndicatorRule(macd, macdEma);
+        Rule exitRule = new CrossedDownIndicatorRule(macd, macdEma);
         Strategy strategy = new BaseStrategy(entryRule, exitRule);
 
         while (!Thread.interrupted()) {
