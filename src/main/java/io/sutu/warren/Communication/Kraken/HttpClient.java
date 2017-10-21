@@ -58,9 +58,6 @@ public class HttpClient {
         private List<String> error;
         private HttpResponseResult result;
 
-        public HttpResponse() {
-        }
-
         public void setError(List<String> error) {
             this.error = error;
         }

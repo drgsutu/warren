@@ -8,10 +8,7 @@ public class HttpResponseResult {
 
     @SerializedName(value = "XXBTZEUR", alternate = {"XETHZEUR"})
     private List<List<String>> pair;
-
     private String last;
-    public HttpResponseResult() {
-    }
 
     public void setPair(List<List<String>> pair) {
         this.pair = pair;
