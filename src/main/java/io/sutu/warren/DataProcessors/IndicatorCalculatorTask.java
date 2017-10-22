@@ -36,7 +36,6 @@ public class IndicatorCalculatorTask implements Runnable {
 
     @Override
     public void run() {
-        long lastProcessedOHLCVTimeStamp = 0;
         List<Tick> ticks = new ArrayList<>();
         TimeSeries timeSeries = new BaseTimeSeries(market, ticks);
         timeSeries.setMaximumTickCount(400);
@@ -53,11 +52,6 @@ public class IndicatorCalculatorTask implements Runnable {
                 List<String> ohlcv = OHLCVQueue.take();
 
                 long timeStamp = Long.parseLong(ohlcv.get(0));
-                if (timeStamp == lastProcessedOHLCVTimeStamp) {
-                    continue;
-                }
-                lastProcessedOHLCVTimeStamp = timeStamp;
-
                 ZonedDateTime endTime = ZonedDateTime.ofInstant(Instant.ofEpochSecond(timeStamp), ZoneId.of("UTC"));
                 Tick tick = new BaseTick(endTime, ohlcv.get(1), ohlcv.get(2), ohlcv.get(3), ohlcv.get(4), ohlcv.get(6));
                 ticks.add(tick);
