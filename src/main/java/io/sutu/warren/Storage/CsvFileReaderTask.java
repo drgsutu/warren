@@ -26,7 +26,12 @@ public class CsvFileReaderTask implements Runnable {
 
     @Override
     public void run() {
-        String filePath = config.getString("data.source.filePath");
+        String filePath = null;
+        try {
+            filePath = config.getString("data.source.filePath");
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+        }
 
         try (BufferedReader bufferedReader = Files.newBufferedReader(Paths.get(filePath))) {
 
