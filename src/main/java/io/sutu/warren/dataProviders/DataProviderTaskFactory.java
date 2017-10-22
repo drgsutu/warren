@@ -1,6 +1,6 @@
-package io.sutu.warren.DataProviders;
+package io.sutu.warren.dataProviders;
 
-import io.sutu.warren.Communication.Kraken.HttpClient;
+import io.sutu.warren.communication.kraken.HttpClient;
 import io.sutu.warren.PipelineQueuesFactory;
 import org.springframework.stereotype.Component;
 

@@ -1,4 +1,4 @@
-package io.sutu.warren.Communication.Kraken;
+package io.sutu.warren.communication.kraken;
 
 import com.google.gson.annotations.SerializedName;
 

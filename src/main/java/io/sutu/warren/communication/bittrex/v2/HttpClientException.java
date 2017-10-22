@@ -1,4 +1,4 @@
-package io.sutu.warren.Communication.Bittrex.V2;
+package io.sutu.warren.communication.bittrex.v2;
 
 public class HttpClientException extends Exception {
 

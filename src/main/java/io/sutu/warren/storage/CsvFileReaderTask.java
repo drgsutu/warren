@@ -1,4 +1,4 @@
-package io.sutu.warren.Storage;
+package io.sutu.warren.storage;
 
 import com.typesafe.config.Config;
 import org.slf4j.Logger;

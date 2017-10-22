@@ -1,4 +1,4 @@
-package io.sutu.warren.Communication.Kraken;
+package io.sutu.warren.communication.kraken;
 
 import com.google.gson.Gson;
 import org.apache.http.client.fluent.Request;

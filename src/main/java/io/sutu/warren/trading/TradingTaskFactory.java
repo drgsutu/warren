@@ -1,4 +1,4 @@
-package io.sutu.warren.Trading;
+package io.sutu.warren.trading;
 
 import io.sutu.warren.PipelineQueuesFactory;
 import org.springframework.stereotype.Component;

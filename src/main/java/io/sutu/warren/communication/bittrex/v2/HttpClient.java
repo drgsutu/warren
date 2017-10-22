@@ -1,4 +1,4 @@
-package io.sutu.warren.Communication.Bittrex.V2;
+package io.sutu.warren.communication.bittrex.v2;
 
 import org.apache.http.client.fluent.Request;
 import org.apache.http.client.utils.URIBuilder;

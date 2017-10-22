@@ -1,14 +1,14 @@
 package io.sutu.warren;
 
 import com.typesafe.config.Config;
-import io.sutu.warren.DataProcessors.TradingTask;
-import io.sutu.warren.DataProcessors.TradingTaskFactory;
-import io.sutu.warren.DataProviders.DataProviderTask;
-import io.sutu.warren.DataProviders.DataProviderTaskFactory;
-import io.sutu.warren.Storage.CsvFileReaderTask;
-import io.sutu.warren.Storage.CsvFileReaderTaskFactory;
-import io.sutu.warren.Storage.CsvFileWriterTask;
-import io.sutu.warren.Storage.CsvFileWriterTaskFactory;
+import io.sutu.warren.trading.TradingTask;
+import io.sutu.warren.trading.TradingTaskFactory;
+import io.sutu.warren.dataProviders.DataProviderTask;
+import io.sutu.warren.dataProviders.DataProviderTaskFactory;
+import io.sutu.warren.storage.CsvFileReaderTask;
+import io.sutu.warren.storage.CsvFileReaderTaskFactory;
+import io.sutu.warren.storage.CsvFileWriterTask;
+import io.sutu.warren.storage.CsvFileWriterTaskFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.concurrent.ExecutorService;

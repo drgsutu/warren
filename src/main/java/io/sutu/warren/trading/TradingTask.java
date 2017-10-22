@@ -1,4 +1,4 @@
-package io.sutu.warren.Trading;
+package io.sutu.warren.trading;
 
 import eu.verdelhan.ta4j.*;
 import eu.verdelhan.ta4j.indicators.EMAIndicator;

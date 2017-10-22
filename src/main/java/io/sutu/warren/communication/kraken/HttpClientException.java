@@ -1,4 +1,4 @@
-package io.sutu.warren.Communication.Kraken;
+package io.sutu.warren.communication.kraken;
 
 public class HttpClientException extends Exception {
 

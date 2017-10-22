@@ -1,4 +1,4 @@
-package io.sutu.warren.Storage;
+package io.sutu.warren.storage;
 
 import io.sutu.warren.PipelineQueuesFactory;
 import org.springframework.stereotype.Component;

@@ -1,8 +1,8 @@
-package io.sutu.warren.DataProviders;
+package io.sutu.warren.dataProviders;
 
-import io.sutu.warren.Communication.Kraken.HttpClient;
-import io.sutu.warren.Communication.Kraken.HttpClientException;
-import io.sutu.warren.Communication.Kraken.HttpResponseResult;
+import io.sutu.warren.communication.kraken.HttpClient;
+import io.sutu.warren.communication.kraken.HttpClientException;
+import io.sutu.warren.communication.kraken.HttpResponseResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
