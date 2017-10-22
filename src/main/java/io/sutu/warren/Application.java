@@ -50,7 +50,7 @@ class Application {
         ExecutorService executorService = Executors.newFixedThreadPool(8);
 
         // get trades data
-        if (config.getBoolean("liveDataSource")) {
+        if (config.getBoolean("data.source.live")) {
             // live data -> OHLCV
             DataProviderTask dataProviderTask =
                     dataProviderTaskFactory.newTaskForMarketAndInterval(MARKETS[0], OHLCV_INTERVAL_SECONDS);
@@ -61,7 +61,7 @@ class Application {
             executorService.submit(csvFileReaderTask);
         }
 
-        if (config.getBoolean("writeTradesToFile")) {
+        if (config.getBoolean("data.writeToFile")) {
             // trades -> file // save trades to file
             CsvFileWriterTask csvFileWriterTask = csvFileWriterTaskFactory.newTask();
             executorService.submit(csvFileWriterTask);

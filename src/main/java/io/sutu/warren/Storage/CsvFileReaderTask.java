@@ -1,5 +1,6 @@
 package io.sutu.warren.Storage;
 
+import com.typesafe.config.Config;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,15 +16,17 @@ public class CsvFileReaderTask implements Runnable {
 
     private static final Logger logger = LoggerFactory.getLogger(CsvFileReaderTask.class);
 
+    private Config config;
     private BlockingQueue<List<String>> OHLCVQueue;
 
-    CsvFileReaderTask(BlockingQueue<List<String>> OHLCVQueue) {
+    CsvFileReaderTask(Config config, BlockingQueue<List<String>> OHLCVQueue) {
+        this.config = config;
         this.OHLCVQueue = OHLCVQueue;
     }
 
     @Override
     public void run() {
-        String filePath = "ohlcv.csv";
+        String filePath = config.getString("data.source.filePath");
 
         try (BufferedReader bufferedReader = Files.newBufferedReader(Paths.get(filePath))) {
 

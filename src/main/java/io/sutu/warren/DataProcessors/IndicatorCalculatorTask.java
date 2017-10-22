@@ -48,6 +48,8 @@ public class IndicatorCalculatorTask implements Runnable {
         Rule exitRule = new CrossedDownIndicatorRule(macd, macdEma);
         Strategy strategy = new BaseStrategy(entryRule, exitRule);
 
+        StochasticRSIIndicator stochasticRSI = new StochasticRSIIndicator(timeSeries, 14);
+
         while (!Thread.interrupted()) {
             try {
                 List<String> ohlcv = OHLCVQueue.take();
@@ -64,12 +66,14 @@ public class IndicatorCalculatorTask implements Runnable {
 
                 logger.debug(DateTimeFormatter.ofPattern("hh:mm").format(tick.getEndTime()) + " " + tick.getClosePrice());
 
-                int index = ticks.size() - 1;
-                if (strategy.shouldEnter(index)) {
+                int endIndex = timeSeries.getEndIndex();
+                logger.debug(stochasticRSI.getValue(endIndex).toString());
+
+                if (strategy.shouldEnter(endIndex)) {
                     // buy
                     logger.info("Buy");
                 }
-                if (strategy.shouldExit(index)) {
+                if (strategy.shouldExit(endIndex)) {
                     // sell
                     logger.info("Sell");
                 }

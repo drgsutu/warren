@@ -17,7 +17,7 @@ public class PipelineQueuesFactory {
 
     public PipelineQueuesFactory(Config config) {
         OHLCVQueues.add(OHLCVToBeProccessedQueue);
-        if (config.getBoolean("writeTradesToFile")) {
+        if (config.getBoolean("data.writeToFile")) {
             OHLCVQueues.add(OHLCVToBeStoredQueue);
         }
     }
