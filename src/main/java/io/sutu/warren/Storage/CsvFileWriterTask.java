@@ -1,5 +1,8 @@
 package io.sutu.warren.Storage;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -11,6 +14,8 @@ import java.util.concurrent.BlockingQueue;
 import java.util.stream.Collectors;
 
 public class CsvFileWriterTask implements Runnable {
+
+    private static final Logger logger = LoggerFactory.getLogger(CsvFileReaderTask.class);
 
     private final BlockingQueue<List<String>> OHLCVQueue;
 
@@ -33,7 +38,7 @@ public class CsvFileWriterTask implements Runnable {
                     writer.println(csvLine);
                 }
             } catch (InterruptedException e) {
-                System.out.println("Interrupted: " + getClass().getName());
+                logger.warn("Thread interrupted", e);
             }
         } catch (IOException e) {
             e.printStackTrace();
