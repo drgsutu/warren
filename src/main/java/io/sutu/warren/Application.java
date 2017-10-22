@@ -1,8 +1,8 @@
 package io.sutu.warren;
 
 import com.typesafe.config.Config;
-import io.sutu.warren.DataProcessors.IndicatorCalculatorTask;
-import io.sutu.warren.DataProcessors.IndicatorCalculatorTaskFactory;
+import io.sutu.warren.DataProcessors.TradingTask;
+import io.sutu.warren.DataProcessors.TradingTaskFactory;
 import io.sutu.warren.DataProviders.DataProviderTask;
 import io.sutu.warren.DataProviders.DataProviderTaskFactory;
 import io.sutu.warren.Storage.CsvFileReaderTask;
@@ -30,20 +30,20 @@ class Application {
     private DataProviderTaskFactory dataProviderTaskFactory;
     private CsvFileReaderTaskFactory csvFileReaderTaskFactory;
     private CsvFileWriterTaskFactory csvFileWriterTaskFactory;
-    private IndicatorCalculatorTaskFactory indicatorCalculatorTaskFactory;
+    private TradingTaskFactory tradingTaskFactory;
 
     public Application(
             Config config,
             DataProviderTaskFactory dataProviderTaskFactory,
             CsvFileReaderTaskFactory csvFileReaderTaskFactory,
             CsvFileWriterTaskFactory csvFileWriterTaskFactory,
-            IndicatorCalculatorTaskFactory indicatorCalculatorTaskFactory
+            TradingTaskFactory tradingTaskFactory
     ) {
         this.config = config;
         this.dataProviderTaskFactory = dataProviderTaskFactory;
         this.csvFileReaderTaskFactory = csvFileReaderTaskFactory;
         this.csvFileWriterTaskFactory = csvFileWriterTaskFactory;
-        this.indicatorCalculatorTaskFactory = indicatorCalculatorTaskFactory;
+        this.tradingTaskFactory = tradingTaskFactory;
     }
 
     void run() {
@@ -68,8 +68,8 @@ class Application {
         }
 
         // OHLCV -> indicators // calculate indicators from OHLCV periods
-        IndicatorCalculatorTask indicatorCalculatorTask = indicatorCalculatorTaskFactory.newTaskForMarket(MARKETS[0]);
-        executorService.submit(indicatorCalculatorTask);
+        TradingTask tradingTask = tradingTaskFactory.newTaskForMarket(MARKETS[0]);
+        executorService.submit(tradingTask);
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             executorService.shutdownNow();

@@ -1,4 +1,4 @@
-package io.sutu.warren.DataProcessors;
+package io.sutu.warren.Trading;
 
 import eu.verdelhan.ta4j.*;
 import eu.verdelhan.ta4j.indicators.EMAIndicator;
@@ -18,16 +18,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 
-public class IndicatorCalculatorTask implements Runnable {
+public class TradingTask implements Runnable {
 
-    private static final Logger logger = LoggerFactory.getLogger(IndicatorCalculatorTask.class);
+    private static final Logger logger = LoggerFactory.getLogger(TradingTask.class);
 
     private static final int MINIMUM_TIME_FRAME = 26;
 
     private String market;
     private BlockingQueue<List<String>> OHLCVQueue;
 
-    IndicatorCalculatorTask(
+    TradingTask(
             String market,
             BlockingQueue<List<String>> OHLCVQueue
     ) {
