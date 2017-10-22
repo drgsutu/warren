@@ -13,7 +13,7 @@ import java.util.concurrent.BlockingQueue;
 
 public class DataProviderTask implements Runnable {
 
-    final static Logger logger = LoggerFactory.getLogger(DataProviderTask.class);
+    private static final Logger logger = LoggerFactory.getLogger(DataProviderTask.class);
 
     private String market;
     private int intervalSeconds;
@@ -80,7 +80,7 @@ public class DataProviderTask implements Runnable {
 
                 waitBeforeNextRequest();
             } catch (InterruptedException e) {
-                logger.warn("Thread interrupted");
+                logger.warn("Thread interrupted", e);
             }
         }
     }

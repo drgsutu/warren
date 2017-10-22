@@ -3,6 +3,7 @@ package io.sutu.warren.DataProcessors;
 import eu.verdelhan.ta4j.*;
 import eu.verdelhan.ta4j.indicators.EMAIndicator;
 import eu.verdelhan.ta4j.indicators.MACDIndicator;
+import eu.verdelhan.ta4j.indicators.StochasticRSIIndicator;
 import eu.verdelhan.ta4j.indicators.helpers.ClosePriceIndicator;
 import eu.verdelhan.ta4j.trading.rules.CrossedDownIndicatorRule;
 import eu.verdelhan.ta4j.trading.rules.CrossedUpIndicatorRule;
@@ -19,7 +20,7 @@ import java.util.concurrent.BlockingQueue;
 
 public class IndicatorCalculatorTask implements Runnable {
 
-    Logger logger = LoggerFactory.getLogger(IndicatorCalculatorTask.class);
+    private static final Logger logger = LoggerFactory.getLogger(IndicatorCalculatorTask.class);
 
     private static final int MINIMUM_TIME_FRAME = 26;
 
@@ -74,7 +75,7 @@ public class IndicatorCalculatorTask implements Runnable {
                 }
 
             } catch (InterruptedException e) {
-                logger.warn("Thread interrupted");
+                logger.warn("Thread interrupted", e);
             }
         }
     }
