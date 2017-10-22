@@ -6,13 +6,15 @@ import org.springframework.stereotype.Component;
 @Component
 public class TradingTaskFactory {
 
+    private StrategiesService strategiesService;
     private PipelineQueuesFactory pipelineQueuesFactory;
 
-    public TradingTaskFactory(PipelineQueuesFactory pipelineQueuesFactory) {
+    public TradingTaskFactory(StrategiesService strategiesService, PipelineQueuesFactory pipelineQueuesFactory) {
+        this.strategiesService = strategiesService;
         this.pipelineQueuesFactory = pipelineQueuesFactory;
     }
 
-    public TradingTask newTaskForMarket(String market) {
-        return new TradingTask(market, pipelineQueuesFactory.getOHLCVToBeProccessedQueue());
+    public TradingTask newTaskForMarket() {
+        return new TradingTask(strategiesService, pipelineQueuesFactory.getOHLCVToBeProccessedQueue());
     }
 }

@@ -68,7 +68,7 @@ class Application {
         }
 
         // OHLCV -> indicators // calculate indicators from OHLCV periods
-        TradingTask tradingTask = tradingTaskFactory.newTaskForMarket(MARKETS[0]);
+        TradingTask tradingTask = tradingTaskFactory.newTaskForMarket();
         executorService.submit(tradingTask);
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
