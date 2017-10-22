@@ -6,15 +6,20 @@ import eu.verdelhan.ta4j.indicators.MACDIndicator;
 import eu.verdelhan.ta4j.indicators.helpers.ClosePriceIndicator;
 import eu.verdelhan.ta4j.trading.rules.CrossedDownIndicatorRule;
 import eu.verdelhan.ta4j.trading.rules.CrossedUpIndicatorRule;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 
 public class IndicatorCalculatorTask implements Runnable {
+
+    Logger logger = LoggerFactory.getLogger(IndicatorCalculatorTask.class);
 
     private static final int MINIMUM_TIME_FRAME = 26;
 
@@ -62,29 +67,21 @@ public class IndicatorCalculatorTask implements Runnable {
                     continue;
                 }
 
+                logger.debug(DateTimeFormatter.ofPattern("hh:mm").format(tick.getEndTime()) + " " + tick.getClosePrice());
+
                 int index = ticks.size() - 1;
-
-                final Decimal macdValue = macd.getValue(index);
-                final Decimal macdEmaValue = macdEma.getValue(index);
-                System.out.println(tick.getEndTime());
-                System.out.println(String.format("MACD %.10f", macdValue.toDouble()));
-                System.out.println(String.format("MEMA %.10f", macdEmaValue.toDouble()));
-                System.out.println(String.format("DIFF %.10f", (macdValue.minus(macdEmaValue)).toDouble()));
-
                 if (strategy.shouldEnter(index)) {
                     // buy
-                    System.out.println("Buy");
+                    logger.info("Buy");
                 }
                 if (strategy.shouldExit(index)) {
                     // sell
-                    System.out.println("Sell");
+                    logger.info("Sell");
                 }
-                System.out.println();
 
             } catch (InterruptedException e) {
-                System.out.println("Interrupted: " + getClass().getName());
+                logger.warn("Thread interrupted");
             }
-
         }
     }
 }
