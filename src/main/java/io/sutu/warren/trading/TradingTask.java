@@ -10,14 +10,14 @@ public class TradingTask implements Runnable {
 
     private static final Logger logger = LoggerFactory.getLogger(TradingTask.class);
 
-    private StrategiesService strategiesService;
+    private TradingStrategiesService tradingStrategiesService;
     private BlockingQueue<List<String>> OHLCVQueue;
 
     TradingTask(
-            StrategiesService strategiesService,
+            TradingStrategiesService tradingStrategiesService,
             BlockingQueue<List<String>> OHLCVQueue
     ) {
-        this.strategiesService = strategiesService;
+        this.tradingStrategiesService = tradingStrategiesService;
         this.OHLCVQueue = OHLCVQueue;
     }
 
@@ -26,17 +26,17 @@ public class TradingTask implements Runnable {
         while (!Thread.interrupted()) {
             try {
                 List<String> ohlcv = OHLCVQueue.take();
-                strategiesService.addOHLCV(ohlcv);
+                tradingStrategiesService.addOHLCV(ohlcv);
 
                 // do not calculate until we have the minimum historical data to calculate indicators
-                if (strategiesService.isReadyForTrading()) {
+                if (!tradingStrategiesService.isReadyForTrading()) {
                     continue;
                 }
 
-                if (strategiesService.shouldEnter()) {
+                if (tradingStrategiesService.shouldEnter()) {
                     logger.info("Buy");
                 }
-                if (strategiesService.shouldExit()) {
+                if (tradingStrategiesService.shouldExit()) {
                     logger.info("Sell");
                 }
 

@@ -21,9 +21,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class StrategiesService {
+public class TradingStrategiesService {
 
-    private static final Logger logger = LoggerFactory.getLogger(StrategiesService.class);
+    private static final Logger logger = LoggerFactory.getLogger(TradingStrategiesService.class);
 
     private static final int MINIMUM_TIME_FRAME = 26;
 
@@ -31,7 +31,7 @@ public class StrategiesService {
     private final TimeSeries timeSeries = new BaseTimeSeries(ticks);
     private final Strategy strategy;
 
-    public StrategiesService() {
+    public TradingStrategiesService() {
         timeSeries.setMaximumTickCount(400);
 
         final ClosePriceIndicator closePriceIndicator = new ClosePriceIndicator(timeSeries);
@@ -63,7 +63,7 @@ public class StrategiesService {
      * Do not calculate until we have the minimum historical data to calculate indicators
      */
     boolean isReadyForTrading() {
-        return ticks.size() < MINIMUM_TIME_FRAME;
+        return ticks.size() > MINIMUM_TIME_FRAME;
     }
 
     boolean shouldEnter() {
